@@ -41,6 +41,42 @@ canvas {
 	border-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Game over screen */
+#game-over-screen {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.75);
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 24px;
+	z-index: 99999;
+}
+
+#game-over-screen.visible {
+	display: flex;
+}
+
+#game-over-screen h1 {
+	color: #e74c3c;
+	font-size: 64px;
+	font-family: monospace;
+	letter-spacing: 6px;
+}
+
+#restart-button {
+	padding: 14px 40px;
+	background: #e74c3c;
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	font-size: 18px;
+	font-weight: bold;
+	letter-spacing: 2px;
+	cursor: pointer;
+}
+
 /* Debug panel */
 #debug-panel {
 	position: fixed;

@@ -37,6 +37,7 @@ export class Player extends GameObject {
     if (this.#damageCooldown > 0) return;
     this.hp = Math.max(0, this.hp - amount);
     this.#damageCooldown = DAMAGE_COOLDOWN;
+    if (this.hp === 0) this.emit('dead');
   }
 
   update(dt) {

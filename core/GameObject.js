@@ -1,6 +1,8 @@
 import { EventEmitter } from './EventEmitter.js';
 
 export class GameObject extends EventEmitter {
+  layer = 0; // higher layer draws on top
+
   // Override these in subclasses. Call super.*() to also fire registered listeners.
 
   init() {

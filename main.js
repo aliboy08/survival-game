@@ -7,14 +7,21 @@ import { ShootButton }     from './ui/ShootButton.js';
 import { AutoShootButton } from './ui/AutoShootButton.js';
 import { EnemySpawner }    from './enemy/EnemySpawner.js';
 import { PlayerHUD }       from './ui/PlayerHUD.js';
+import { GameOverScreen }  from './ui/GameOverScreen.js';
 import { DebugPanel }      from './ui/DebugPanel.js';
 
-const game  = new Game('gameCanvas');
-const input = new Input(game.canvas);
+const game       = new Game('gameCanvas');
+const input      = new Input(game.canvas);
+const gameOver   = new GameOverScreen();
 
 const player      = new Player(game.canvas.width / 2, game.canvas.height / 2, input);
 const shootSystem = new ShootSystem(game, player, input);
 const joystick    = new VirtualJoystick(game.canvas, input);
+
+player.on('dead', () => {
+  game.stop();
+  gameOver.show();
+});
 
 await game.add(player);
 await game.add(shootSystem);

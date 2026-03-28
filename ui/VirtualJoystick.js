@@ -15,6 +15,7 @@ export class VirtualJoystick extends GameObject {
 
   constructor(canvas, input) {
     super();
+    this.layer   = 10;
     this.#canvas = canvas;
     this.#input  = input;
   }

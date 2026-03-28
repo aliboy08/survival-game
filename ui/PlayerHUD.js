@@ -9,6 +9,7 @@ export class PlayerHUD extends GameObject {
 
   constructor(player) {
     super();
+    this.layer   = 10;
     this.#player = player;
   }
 
