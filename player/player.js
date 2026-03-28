@@ -5,16 +5,16 @@ const SPRITE_SCALE = 2; // 48x48 → 96x96
 const SPRITE_SIZE  = 48;
 const SPEED        = 150; // pixels per second
 
-const DIRECTION_MAP = {
-  '0,-1':  'north',
-  '1,-1':  'north-east',
-  '1,0':   'east',
-  '1,1':   'south-east',
-  '0,1':   'south',
-  '-1,1':  'south-west',
-  '-1,0':  'west',
-  '-1,-1': 'north-west',
-};
+const ANGLE_TO_DIRECTION = [
+  'east', 'south-east', 'south', 'south-west',
+  'west', 'north-west', 'north', 'north-east',
+];
+
+function vectorToDirection(x, y) {
+  const angle = Math.atan2(y, x);                        // -PI to PI, 0 = east
+  const index = Math.round(angle / (Math.PI / 4) + 8) % 8;
+  return ANGLE_TO_DIRECTION[index];
+}
 
 export class Player extends GameObject {
   #sprites   = null;
@@ -54,8 +54,7 @@ export class Player extends GameObject {
       this.x += (x / len) * SPEED * dt;
       this.y += (y / len) * SPEED * dt;
 
-      const dir = DIRECTION_MAP[`${x},${y}`];
-      if (dir) this.#direction = dir;
+      this.#direction = vectorToDirection(x, y);
     }
 
     super.update(dt);
