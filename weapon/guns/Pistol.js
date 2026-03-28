@@ -10,6 +10,7 @@ export class Pistol extends Gun {
       fireRate:      0.3,
       magazine:      12,
       ammo:          60,
+      reloadTime:    1.5,
     });
   }
 }

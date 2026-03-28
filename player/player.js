@@ -19,12 +19,15 @@ export class Player extends GameObject {
   #movement        = new Movement();
   #damageCooldown  = 0;
 
-  hp        = MAX_HP;
-  maxHp     = MAX_HP;
-  xp        = 0;
-  xpToNext  = 100;
-  level     = 1;
-  equipment = new Equipment();
+  hp           = MAX_HP;
+  maxHp        = MAX_HP;
+  xp           = 0;
+  xpToNext     = 100;
+  level        = 1;
+  equipment    = new Equipment();
+  activeSlot   = 'primary';
+  godMode      = false;
+  infiniteAmmo = false;
 
   constructor(x, y, input) {
     super();
@@ -47,6 +50,15 @@ export class Player extends GameObject {
   get facing()      { return this.#direction; }
   set facing(dir)   { this.#direction = dir; }
 
+  get activeWeapon() { return this.equipment[this.activeSlot] ?? null; }
+
+  cycleWeapon() {
+    const slots = ['primary', 'secondary', 'melee'];
+    const next  = (slots.indexOf(this.activeSlot) + 1) % slots.length;
+    this.activeSlot = slots[next];
+    this.emit('weaponswitch', this.activeSlot);
+  }
+
   gainXp(amount) {
     this.xp += amount;
     while (this.xp >= this.xpToNext) {
@@ -60,6 +72,7 @@ export class Player extends GameObject {
   }
 
   takeDamage(amount) {
+    if (this.godMode) return;
     if (this.#damageCooldown > 0) return;
     this.hp = Math.max(0, this.hp - amount);
     this.#damageCooldown = DAMAGE_COOLDOWN;

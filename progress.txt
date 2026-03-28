@@ -34,4 +34,11 @@ sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2a
 
 - player equipment system - slots: primary, secondary, melee
 
-show equipment ui indicator
+===
+
+- hud: display equipment
+
+- weapon switch: cycle through primary, secondary, melee (1 active weapon at a time)
+- melee attack
+- ammo + magazine + reload system
+- auto target radius

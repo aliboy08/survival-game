@@ -12,7 +12,7 @@ export class PlayerHUD extends GameObject {
 
 	constructor(player) {
 		super();
-		this.layer = 10;
+		this.layer   = 10;
 		this.#player = player;
 		player.on('levelup', () => {
 			this.#levelUpTimer = 2;

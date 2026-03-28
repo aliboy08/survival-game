@@ -76,3 +76,7 @@ properties: damage, range, attack speed
 create melee weapon called "Sword"
 
 shoot button will now shoot the equipped weapon to the direction the player is facing, regardless if there is no enemy
+
+add weapon switch button, the player would only have 1 active weapon type at a time, clicking the switch button would cycle through orimary, secondary, melee
+
+auto target radius

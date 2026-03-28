@@ -1,5 +1,7 @@
 import { GameObject } from '../core/GameObject.js';
 import { Laser }      from '../projectile/Laser.js';
+import { Melee }      from '../weapon/melee/Melee.js';
+import { Enemy }      from '../enemy/enemy.js';
 
 const DIRECTION_VECTORS = {
   'north':      { x:  0, y: -1 },
@@ -17,9 +19,13 @@ export class ShootSystem extends GameObject {
   #player;
   #input;
   #selector;
-  #cooldown    = 0;
-  #autoShoot   = false;
-  #activeLaser = null;
+  #cooldown        = 0;
+  #autoShoot       = false;
+  #activeLaser     = null;
+  #meleeFlash      = 0;
+  #meleeFlashTotal = 0;
+  #reloadTimer     = 0;
+  #targetIndicator = null;
 
   constructor(game, player, input, selector) {
     super();
@@ -29,40 +35,133 @@ export class ShootSystem extends GameObject {
     this.#selector = selector;
   }
 
-  get autoShoot() { return this.#autoShoot; }
+  get autoShoot()                { return this.#autoShoot; }
+  set targetIndicator(ti)        { this.#targetIndicator = ti; }
 
   toggleAutoShoot() {
     this.#autoShoot = !this.#autoShoot;
     return this.#autoShoot;
   }
 
-  update(dt) {
-    const weapon      = this.#selector.activeWeapon;
-    const shouldShoot = this.#input.shootHeld || this.#autoShoot;
+  reload() {
+    const weapon = this.#player.activeWeapon;
+    if (!weapon?.reloadTime) return;
+    if (this.#reloadTimer > 0) return;
+    if (weapon.currentMagazine >= weapon.magazine) return;
+    this.#reloadTimer = weapon.reloadTime;
+  }
 
-    if (weapon === 'laser') {
+  update(dt) {
+    const selectorWeapon = this.#selector.activeWeapon;
+    const activeWeapon   = this.#player.activeWeapon;
+    const hasEnemy       = this.#game.getEntities(Enemy).length > 0;
+    const shouldShoot    = this.#input.shootHeld || (this.#autoShoot && hasEnemy);
+
+    if (selectorWeapon === 'laser') {
       this.#updateLaser(shouldShoot);
+    } else if (activeWeapon instanceof Melee) {
+      this.#killLaser();
+      this.#updateMelee(dt, shouldShoot);
     } else {
       this.#killLaser();
       this.#updateGun(dt, shouldShoot);
     }
 
+    if (this.#meleeFlash > 0) this.#meleeFlash -= dt;
     super.update(dt);
   }
 
+  draw(ctx) {
+    if (this.#meleeFlash <= 0) return;
+
+    const player  = this.#player;
+    const weapon  = player.activeWeapon;
+    if (!(weapon instanceof Melee)) return;
+
+    const progress = this.#meleeFlash / this.#meleeFlashTotal;
+    const alpha    = progress * 0.45;
+    const dir      = DIRECTION_VECTORS[player.facing] ?? DIRECTION_VECTORS['south'];
+    const angle    = Math.atan2(dir.y, dir.x);
+    const spread   = Math.PI / 3; // 60° half-angle = 120° total cone
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle   = '#f39c12';
+    ctx.shadowColor = '#f39c12';
+    ctx.shadowBlur  = 18;
+    ctx.beginPath();
+    ctx.moveTo(player.x, player.y);
+    ctx.arc(player.x, player.y, weapon.range, angle - spread, angle + spread);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    super.draw(ctx);
+  }
+
+  get reloading() { return this.#reloadTimer > 0; }
+
   #updateGun(dt, shouldShoot) {
     if (this.#cooldown > 0) this.#cooldown -= dt;
-    if (this.#cooldown > 0 || !shouldShoot) return;
 
     const player = this.#player;
-    const weapon = player.equipment.primary;
+    const weapon = player.activeWeapon;
     if (!weapon) return;
 
-    const dir    = DIRECTION_VECTORS[player.facing] ?? DIRECTION_VECTORS['south'];
-    const target = { x: player.x + dir.x * 100, y: player.y + dir.y * 100 };
+    // Reload tick
+    if (this.#reloadTimer > 0) {
+      this.#reloadTimer -= dt;
+      if (this.#reloadTimer <= 0) {
+        const needed = weapon.magazine - weapon.currentMagazine;
+        const refill = player.infiniteAmmo ? needed : Math.min(needed, weapon.ammo);
+        weapon.ammo            -= player.infiniteAmmo ? 0 : refill;
+        weapon.currentMagazine += refill;
+      }
+      return;
+    }
+
+    if (this.#cooldown > 0 || !shouldShoot) return;
+
+    const activeTarget = this.#targetIndicator?.target ?? null;
+    const dir          = DIRECTION_VECTORS[player.facing] ?? DIRECTION_VECTORS['south'];
+    const target       = activeTarget ?? { x: player.x + dir.x * 100, y: player.y + dir.y * 100 };
 
     this.#game.add(new weapon.projectile(player.x, player.y, target, this.#game));
     this.#cooldown = weapon.fireRate;
+
+    if (!player.infiniteAmmo) weapon.currentMagazine--;
+    if (weapon.currentMagazine <= 0) this.#reloadTimer = weapon.reloadTime;
+  }
+
+  #updateMelee(dt, shouldShoot) {
+    if (this.#cooldown > 0) this.#cooldown -= dt;
+    if (this.#cooldown > 0 || !shouldShoot) return;
+
+    const player     = this.#player;
+    const weapon     = player.activeWeapon;
+    const activeTarget = this.#targetIndicator?.target ?? null;
+    const dir          = DIRECTION_VECTORS[player.facing] ?? DIRECTION_VECTORS['south'];
+    const rawNx        = activeTarget ? activeTarget.x - player.x : dir.x;
+    const rawNy        = activeTarget ? activeTarget.y - player.y : dir.y;
+    const dirLen     = Math.hypot(rawNx, rawNy) || 1;
+    const dirNx      = rawNx / dirLen;
+    const dirNy      = rawNy / dirLen;
+
+    for (const enemy of this.#game.getEntities(Enemy)) {
+      const ex   = enemy.x - player.x;
+      const ey   = enemy.y - player.y;
+      const dist = Math.hypot(ex, ey);
+      if (dist > weapon.range) continue;
+
+      const dot = (ex / dist) * dirNx + (ey / dist) * dirNy;
+      if (dot < 0.5) continue; // ~60° half-angle cone
+
+      enemy.takeDamage(weapon.damage);
+    }
+
+    this.#cooldown        = weapon.attackSpeed;
+    this.#meleeFlashTotal = weapon.attackSpeed * 0.35;
+    this.#meleeFlash      = this.#meleeFlashTotal;
   }
 
   #updateLaser(shouldShoot) {
