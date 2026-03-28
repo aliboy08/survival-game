@@ -36,6 +36,8 @@ export class Player extends GameObject {
     super.init();
   }
 
+  set facing(dir) { this.#direction = dir; }
+
   gainXp(amount) {
     this.xp += amount;
     while (this.xp >= this.xpToNext) {

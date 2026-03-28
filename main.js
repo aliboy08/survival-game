@@ -10,6 +10,7 @@ import { WeaponSelectUI }  from './ui/WeaponSelectUI.js';
 import { EnemySpawner }    from './enemy/EnemySpawner.js';
 import { PlayerHUD }       from './ui/PlayerHUD.js';
 import { GameOverScreen }  from './ui/GameOverScreen.js';
+import { TargetIndicator } from './ui/TargetIndicator.js';
 import { DebugPanel }      from './ui/DebugPanel.js';
 
 const game     = new Game('gameCanvas');
@@ -31,6 +32,7 @@ await game.add(shootSystem);
 await game.add(joystick);
 await game.add(new EnemySpawner(game, player));
 await game.add(new PlayerHUD(player));
+await game.add(new TargetIndicator(game, player));
 
 new ShootButton(input);
 new AutoShootButton(shootSystem);
