@@ -13,9 +13,12 @@ export class ShootButton {
     this.#btn.textContent = 'SHOOT';
 
     this.#btn.addEventListener('pointerdown', (e) => {
-      e.stopPropagation(); // prevent tap-to-move on canvas
-      this.#input.setShoot();
+      e.stopPropagation();
+      this.#input.setShootHeld(true);
     });
+    this.#btn.addEventListener('pointerup',     () => this.#input.setShootHeld(false));
+    this.#btn.addEventListener('pointercancel', () => this.#input.setShootHeld(false));
+    this.#btn.addEventListener('pointerleave',  () => this.#input.setShootHeld(false));
 
     document.body.appendChild(this.#btn);
   }

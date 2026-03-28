@@ -2,10 +2,13 @@ import { GameObject }  from '../core/GameObject.js';
 import { Enemy }       from '../enemy/enemy.js';
 import { Projectile }  from '../projectile/projectile.js';
 
+const FIRE_RATE = 0.15; // seconds between shots
+
 export class ShootSystem extends GameObject {
   #game;
   #player;
   #input;
+  #cooldown = 0;
 
   constructor(game, player, input) {
     super();
@@ -15,7 +18,9 @@ export class ShootSystem extends GameObject {
   }
 
   update(dt) {
-    if (!this.#input.consumeShoot()) return;
+    if (this.#cooldown > 0) this.#cooldown -= dt;
+
+    if (!this.#input.shootHeld || this.#cooldown > 0) return;
 
     const enemies = this.#game.getEntities(Enemy);
     if (enemies.length === 0) return;
@@ -27,6 +32,7 @@ export class ShootSystem extends GameObject {
     });
 
     this.#game.add(new Projectile(player.x, player.y, closest, this.#game));
+    this.#cooldown = FIRE_RATE;
 
     super.update(dt);
   }
