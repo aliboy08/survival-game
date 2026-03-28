@@ -1,0 +1,62 @@
+export class Game {
+  #canvas;
+  #ctx;
+  #entities = new Set();
+  #lastTime = 0;
+  #rafId = null;
+
+  constructor(canvasId) {
+    this.#canvas = document.getElementById(canvasId);
+    this.#ctx = this.#canvas.getContext('2d');
+    this.#ctx.imageSmoothingEnabled = false;
+
+    window.addEventListener('resize', () => this.#resize());
+    this.#resize();
+  }
+
+  get canvas() { return this.#canvas; }
+  get ctx()    { return this.#ctx; }
+
+  async add(entity) {
+    await entity.init();
+    this.#entities.add(entity);
+    return entity;
+  }
+
+  remove(entity) {
+    entity.destroy();
+    this.#entities.delete(entity);
+  }
+
+  start() {
+    this.#rafId = requestAnimationFrame((t) => this.#loop(t));
+  }
+
+  stop() {
+    if (this.#rafId !== null) {
+      cancelAnimationFrame(this.#rafId);
+      this.#rafId = null;
+    }
+  }
+
+  #resize() {
+    this.#canvas.width  = window.innerWidth;
+    this.#canvas.height = window.innerHeight;
+    this.#ctx.imageSmoothingEnabled = false; // reset after resize
+  }
+
+  #loop(timestamp) {
+    const dt = Math.min((timestamp - this.#lastTime) / 1000, 0.1); // seconds, capped
+    this.#lastTime = timestamp;
+
+    this.#ctx.fillStyle = '#1a1a2e';
+    this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
+
+    for (const entity of this.#entities) {
+      entity.update(dt);
+      entity.draw(this.#ctx);
+    }
+
+    this.#rafId = requestAnimationFrame((t) => this.#loop(t));
+  }
+}
