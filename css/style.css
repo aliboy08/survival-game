@@ -13,17 +13,20 @@ canvas {
 	display: block;
 }
 
-/* Fire button */
-#fire-button {
+/* Shoot button */
+#shoot-button {
 	position: fixed;
 	bottom: 30px;
 	right: 30px;
-	width: 72px;
-	height: 72px;
+	width: 80px;
+	height: 80px;
 	border-radius: 50%;
 	background: rgba(192, 57, 43, 0.85);
 	border: 3px solid rgba(255, 255, 255, 0.4);
-	font-size: 28px;
+	color: #fff;
+	font-size: 13px;
+	font-weight: bold;
+	letter-spacing: 1px;
 	cursor: pointer;
 	z-index: 100;
 	touch-action: none;

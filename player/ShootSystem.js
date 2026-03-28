@@ -2,7 +2,7 @@ import { GameObject }  from '../core/GameObject.js';
 import { Enemy }       from '../enemy/enemy.js';
 import { Projectile }  from '../projectile/projectile.js';
 
-export class FireSystem extends GameObject {
+export class ShootSystem extends GameObject {
   #game;
   #player;
   #input;
@@ -15,7 +15,7 @@ export class FireSystem extends GameObject {
   }
 
   update(dt) {
-    if (!this.#input.consumeFire()) return;
+    if (!this.#input.consumeShoot()) return;
 
     const enemies = this.#game.getEntities(Enemy);
     if (enemies.length === 0) return;
