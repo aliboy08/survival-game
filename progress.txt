@@ -1,0 +1,9 @@
+npx serve
+
+character
+
+- directional movement wasd + analog touch controls for mobile
+- click / tap move
+- walk + idle animations
+
+- enemy

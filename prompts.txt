@@ -1,5 +1,3 @@
-npx serve
-
 we are going to create a game using js and canvas
 
 this will be top down pixel art style
@@ -20,3 +18,10 @@ add wasd directional controls
 
 create mobile game style controllers on the screen for mobile support, this will also map to the wasd, pressing wasd would move the analog like controls
 
+add on screen position tap or pointer click, it would move the character to that direction. long press or touch drag would not trigger this.
+
+
+create enemy, for now we don't have sprites for this, just render them in red boxes in the mean time
+it will have hp
+
+create a debug button to spawn the enemy randomly in the screen
