@@ -2,10 +2,12 @@ import { Enemy } from '../enemy/enemy.js';
 
 export class DebugPanel {
   #game;
+  #player;
   #panel;
 
-  constructor(game) {
-    this.#game = game;
+  constructor(game, player) {
+    this.#game   = game;
+    this.#player = player;
     this.#build();
   }
 
@@ -30,6 +32,6 @@ export class DebugPanel {
     const padding = 60;
     const x = padding + Math.random() * (this.#game.canvas.width  - padding * 2);
     const y = padding + Math.random() * (this.#game.canvas.height - padding * 2);
-    this.#game.add(new Enemy(x, y));
+    this.#game.add(new Enemy(x, y, this.#player));
   }
 }

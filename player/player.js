@@ -3,14 +3,20 @@ import { loadPlayerSprites } from './sprite.js';
 import { Animator }          from './animator.js';
 import { Movement }          from './movement.js';
 
-const SPRITE_SCALE = 2; // 48x48 → 96x96
-const SPRITE_SIZE  = 48;
+const SPRITE_SCALE      = 2; // 48x48 → 96x96
+const SPRITE_SIZE       = 48;
+const MAX_HP            = 100;
+const DAMAGE_COOLDOWN   = 1; // seconds of invincibility after a hit
 
 export class Player extends GameObject {
-  #animator  = null;
-  #direction = 'south';
+  #animator        = null;
+  #direction       = 'south';
   #input;
-  #movement  = new Movement();
+  #movement        = new Movement();
+  #damageCooldown  = 0;
+
+  hp    = MAX_HP;
+  maxHp = MAX_HP;
 
   constructor(x, y, input) {
     super();
@@ -27,7 +33,15 @@ export class Player extends GameObject {
     super.init();
   }
 
+  takeDamage(amount) {
+    if (this.#damageCooldown > 0) return;
+    this.hp = Math.max(0, this.hp - amount);
+    this.#damageCooldown = DAMAGE_COOLDOWN;
+  }
+
   update(dt) {
+    if (this.#damageCooldown > 0) this.#damageCooldown -= dt;
+
     const dir = this.#movement.update(this, this.#input, dt);
 
     if (dir) {
