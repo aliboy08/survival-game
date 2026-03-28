@@ -13,28 +13,29 @@ export class PlayerHUD extends GameObject {
   }
 
   draw(ctx) {
-    const p      = this.#player;
-    const x      = PADDING;
-    const y      = PADDING;
-    const ratio  = Math.max(0, p.hp / p.maxHp);
+    const p     = this.#player;
+    const x     = PADDING;
+    const y     = PADDING;
+    const ratio = Math.max(0, p.hp / p.maxHp);
 
-    // Label
-    ctx.fillStyle = '#fff';
-    ctx.font      = 'bold 12px monospace';
-    ctx.fillText(`HP  ${p.hp} / ${p.maxHp}`, x, y + BAR_HEIGHT - 2);
-
-    // Background
+    // Bar background
     ctx.fillStyle = '#333';
-    ctx.fillRect(x + 72, y, BAR_WIDTH, BAR_HEIGHT);
+    ctx.fillRect(x, y, BAR_WIDTH, BAR_HEIGHT);
 
-    // Fill — green → yellow → red based on ratio
+    // Bar fill — green → yellow → red
     ctx.fillStyle = ratio > 0.5 ? '#2ecc71' : ratio > 0.25 ? '#f39c12' : '#e74c3c';
-    ctx.fillRect(x + 72, y, Math.round(BAR_WIDTH * ratio), BAR_HEIGHT);
+    ctx.fillRect(x, y, Math.round(BAR_WIDTH * ratio), BAR_HEIGHT);
 
-    // Border
+    // Bar border
     ctx.strokeStyle = 'rgba(255,255,255,0.3)';
     ctx.lineWidth   = 1;
-    ctx.strokeRect(x + 72, y, BAR_WIDTH, BAR_HEIGHT);
+    ctx.strokeRect(x, y, BAR_WIDTH, BAR_HEIGHT);
+
+    // Label below bar
+    ctx.fillStyle    = '#fff';
+    ctx.font         = 'bold 11px monospace';
+    ctx.textAlign    = 'left';
+    ctx.fillText(`HP  ${p.hp} / ${p.maxHp}`, x, y + BAR_HEIGHT + 13);
 
     super.draw(ctx);
   }
