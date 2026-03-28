@@ -1,0 +1,22 @@
+npx serve
+
+we are going to create a game using js and canvas
+
+this will be top down pixel art style
+
+for now, setup the canvas it will be full screen.
+
+create a folder named "player" put to codes related to the player here.
+
+create a "player" it will just render the player sprite in the canvas
+
+we are going to use class based approach and hooks
+
+when creating files organize them in relavant folders
+
+added character sprite
+
+add wasd directional controls
+
+create mobile game style controllers on the screen for mobile support, this will also map to the wasd, pressing wasd would move the analog like controls
+
