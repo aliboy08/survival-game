@@ -4,6 +4,7 @@ import { Player }          from './player/player.js';
 import { ShootSystem }     from './player/ShootSystem.js';
 import { VirtualJoystick } from './ui/VirtualJoystick.js';
 import { ShootButton }     from './ui/ShootButton.js';
+import { AutoShootButton } from './ui/AutoShootButton.js';
 import { EnemySpawner }    from './enemy/EnemySpawner.js';
 import { DebugPanel }      from './ui/DebugPanel.js';
 
@@ -20,6 +21,7 @@ await game.add(joystick);
 await game.add(new EnemySpawner(game, player));
 
 new ShootButton(input);
+new AutoShootButton(shootSystem);
 new DebugPanel(game, player);
 
 game.start();

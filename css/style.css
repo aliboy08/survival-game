@@ -13,11 +13,11 @@ canvas {
 	display: block;
 }
 
-/* Shoot button */
-#shoot-button {
+/* Shoot buttons */
+#shoot-button,
+#auto-shoot-button {
 	position: fixed;
 	bottom: 30px;
-	right: 30px;
 	width: 80px;
 	height: 80px;
 	border-radius: 50%;
@@ -31,6 +31,14 @@ canvas {
 	z-index: 100;
 	touch-action: none;
 	user-select: none;
+}
+
+#shoot-button      { right: 30px; }
+#auto-shoot-button { right: 122px; }
+
+#auto-shoot-button.active {
+	background: rgba(39, 174, 96, 0.9);
+	border-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Debug panel */

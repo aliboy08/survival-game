@@ -8,7 +8,8 @@ export class ShootSystem extends GameObject {
   #game;
   #player;
   #input;
-  #cooldown = 0;
+  #cooldown   = 0;
+  #autoShoot  = false;
 
   constructor(game, player, input) {
     super();
@@ -17,10 +18,19 @@ export class ShootSystem extends GameObject {
     this.#input  = input;
   }
 
+  get autoShoot() { return this.#autoShoot; }
+
+  toggleAutoShoot() {
+    this.#autoShoot = !this.#autoShoot;
+    return this.#autoShoot;
+  }
+
   update(dt) {
     if (this.#cooldown > 0) this.#cooldown -= dt;
+    if (this.#cooldown > 0) return;
 
-    if (!this.#input.shootHeld || this.#cooldown > 0) return;
+    const shouldShoot = this.#input.shootHeld || this.#autoShoot;
+    if (!shouldShoot) return;
 
     const enemies = this.#game.getEntities(Enemy);
     if (enemies.length === 0) return;
