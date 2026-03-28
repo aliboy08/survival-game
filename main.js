@@ -6,6 +6,7 @@ import { VirtualJoystick } from './ui/VirtualJoystick.js';
 import { ShootButton }     from './ui/ShootButton.js';
 import { AutoShootButton } from './ui/AutoShootButton.js';
 import { EnemySpawner }    from './enemy/EnemySpawner.js';
+import { PlayerHUD }       from './ui/PlayerHUD.js';
 import { DebugPanel }      from './ui/DebugPanel.js';
 
 const game  = new Game('gameCanvas');
@@ -19,6 +20,7 @@ await game.add(player);
 await game.add(shootSystem);
 await game.add(joystick);
 await game.add(new EnemySpawner(game, player));
+await game.add(new PlayerHUD(player));
 
 new ShootButton(input);
 new AutoShootButton(shootSystem);
