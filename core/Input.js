@@ -1,10 +1,51 @@
+const TAP_MAX_DURATION_MS = 250;
+const TAP_MAX_MOVE_PX     = 8;
+
 export class Input {
   #keys           = new Set();
   #joystickVector = { x: 0, y: 0 };
 
-  constructor() {
+  // tap-to-move
+  #canvas;
+  #tapTarget       = null; // { x, y } in canvas coords, consumed once
+  #pointerDownPos  = null;
+  #pointerDownTime = 0;
+
+  constructor(canvas) {
+    this.#canvas = canvas;
+
     window.addEventListener('keydown', (e) => this.#keys.add(e.code));
     window.addEventListener('keyup',   (e) => this.#keys.delete(e.code));
+
+    canvas.addEventListener('pointerdown', (e) => this.#onPointerDown(e));
+    canvas.addEventListener('pointerup',   (e) => this.#onPointerUp(e));
+  }
+
+  #onPointerDown(e) {
+    // Only primary button / first touch
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    this.#pointerDownPos  = { x: e.clientX, y: e.clientY };
+    this.#pointerDownTime = performance.now();
+  }
+
+  #onPointerUp(e) {
+    if (!this.#pointerDownPos) return;
+
+    const duration = performance.now() - this.#pointerDownTime;
+    const dx       = e.clientX - this.#pointerDownPos.x;
+    const dy       = e.clientY - this.#pointerDownPos.y;
+    const moved    = Math.hypot(dx, dy);
+
+    this.#pointerDownPos = null;
+
+    if (duration <= TAP_MAX_DURATION_MS && moved <= TAP_MAX_MOVE_PX) {
+      // Convert client coords to canvas coords
+      const rect = this.#canvas.getBoundingClientRect();
+      this.#tapTarget = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    }
   }
 
   isDown(code) {
@@ -27,6 +68,13 @@ export class Input {
   // Called by VirtualJoystick with a normalised vector
   setJoystick(x, y) {
     this.#joystickVector = { x, y };
+  }
+
+  // Returns the pending tap target and clears it (one-shot)
+  consumeTapTarget() {
+    const t = this.#tapTarget;
+    this.#tapTarget = null;
+    return t;
   }
 
   // Combined keyboard + joystick, clamped to magnitude 1

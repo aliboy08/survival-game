@@ -16,10 +16,13 @@ function vectorToDirection(x, y) {
   return ANGLE_TO_DIRECTION[index];
 }
 
+const ARRIVE_THRESHOLD = 4; // pixels — close enough to target
+
 export class Player extends GameObject {
-  #sprites   = null;
-  #direction = 'south';
+  #sprites     = null;
+  #direction   = 'south';
   #input;
+  #moveTarget  = null; // { x, y } set by tap-to-move
 
   constructor(x, y, input) {
     super();
@@ -46,15 +49,32 @@ export class Player extends GameObject {
   }
 
   update(dt) {
-    const { x, y } = this.#input.movement;
+    const tap = this.#input.consumeTapTarget();
+    if (tap) this.#moveTarget = tap;
 
-    if (x !== 0 || y !== 0) {
-      // normalize diagonal movement
+    const { x, y } = this.#input.movement;
+    const hasDirectInput = x !== 0 || y !== 0;
+
+    if (hasDirectInput) {
+      // WASD / joystick — cancel tap target
+      this.#moveTarget = null;
       const len = Math.sqrt(x * x + y * y);
       this.x += (x / len) * SPEED * dt;
       this.y += (y / len) * SPEED * dt;
-
       this.#direction = vectorToDirection(x, y);
+
+    } else if (this.#moveTarget) {
+      const dx   = this.#moveTarget.x - this.x;
+      const dy   = this.#moveTarget.y - this.y;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist <= ARRIVE_THRESHOLD) {
+        this.#moveTarget = null;
+      } else {
+        this.x += (dx / dist) * SPEED * dt;
+        this.y += (dy / dist) * SPEED * dt;
+        this.#direction = vectorToDirection(dx, dy);
+      }
     }
 
     super.update(dt);
