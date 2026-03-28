@@ -4,6 +4,7 @@ import { Player }          from './player/player.js';
 import { ShootSystem }     from './player/ShootSystem.js';
 import { VirtualJoystick } from './ui/VirtualJoystick.js';
 import { ShootButton }     from './ui/ShootButton.js';
+import { EnemySpawner }    from './enemy/EnemySpawner.js';
 import { DebugPanel }      from './ui/DebugPanel.js';
 
 const game  = new Game('gameCanvas');
@@ -16,6 +17,7 @@ const joystick   = new VirtualJoystick(game.canvas, input);
 await game.add(player);
 await game.add(shootSystem);
 await game.add(joystick);
+await game.add(new EnemySpawner(game));
 
 new ShootButton(input);
 new DebugPanel(game);
