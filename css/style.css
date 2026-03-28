@@ -41,6 +41,58 @@ canvas {
 	border-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Weapon select panel */
+#weapon-select-panel {
+  position: fixed;
+  bottom: 140px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 9999;
+  touch-action: none;
+  user-select: none;
+}
+
+#weapon-select-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  font-family: monospace;
+  letter-spacing: 2px;
+}
+
+#weapon-select-row {
+  display: flex;
+  gap: 6px;
+}
+
+.weapon-btn {
+  width: 68px;
+  height: 36px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-weight: bold;
+  font-family: monospace;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.weapon-btn[data-weapon="bullet"].active {
+  background: rgba(249, 202, 36, 0.25);
+  border-color: #f9ca24;
+  color: #f9ca24;
+}
+
+.weapon-btn[data-weapon="laser"].active {
+  background: rgba(0, 255, 255, 0.15);
+  border-color: #00ffff;
+  color: #00ffff;
+}
+
 /* Game over screen */
 #game-over-screen {
 	display: none;

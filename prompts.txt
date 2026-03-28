@@ -1,3 +1,5 @@
+before implementing, please confirm if you understood the request and list the plan of actions and wait for my go signal to execute
+
 we are going to create a game using js and canvas
 
 this will be top down pixel art style
@@ -44,3 +46,15 @@ the ui will have the highest z-index
 add player hp, when the enemy collides with the player it will reduce the players hp
 
 game over when player hp is 0
+
+add xp and level up system, killing enemies would give xp
+
+add a laser type projectile which deals continous damage
+
+create a temporary select projectile ui where it would switch the player projectile to the selected.
+The options are: bullet and laser, default = bullet
+
+create "bullet" projectile class, it will have properties like velocity, size, and damage
+create "laser" projectile class, it will have size, and damage, it doesn't have velocity which means it will hit the enemy instantly, compared to a bullet which has travel time.
+
+udpate laser to not go through an enemy, it will only hit 1 enemy at a time.

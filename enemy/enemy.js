@@ -10,22 +10,26 @@ export class Enemy extends GameObject {
   #healthBar = new HealthBar();
   #player;
 
-  constructor(x, y, player, { hp = 100 } = {}) {
+  constructor(x, y, player, { hp = 100, xpReward = 25 } = {}) {
     super();
-    this.x       = x;
-    this.y       = y;
-    this.width   = WIDTH;
-    this.height  = HEIGHT;
-    this.maxHp   = hp;
-    this.hp      = hp;
-    this.#player = player;
+    this.x         = x;
+    this.y         = y;
+    this.width     = WIDTH;
+    this.height    = HEIGHT;
+    this.maxHp     = hp;
+    this.hp        = hp;
+    this.xpReward  = xpReward;
+    this.#player   = player;
   }
 
   get isDead() { return this.hp <= 0; }
 
   takeDamage(amount) {
     this.hp = Math.max(0, this.hp - amount);
-    if (this.isDead) this.dead = true;
+    if (this.isDead) {
+      this.#player.gainXp(this.xpReward);
+      this.dead = true;
+    }
   }
 
   update(dt) {

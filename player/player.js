@@ -15,8 +15,11 @@ export class Player extends GameObject {
   #movement        = new Movement();
   #damageCooldown  = 0;
 
-  hp    = MAX_HP;
-  maxHp = MAX_HP;
+  hp      = MAX_HP;
+  maxHp   = MAX_HP;
+  xp      = 0;
+  xpToNext = 100;
+  level   = 1;
 
   constructor(x, y, input) {
     super();
@@ -31,6 +34,18 @@ export class Player extends GameObject {
     const sprites  = await loadPlayerSprites();
     this.#animator = new Animator(sprites);
     super.init();
+  }
+
+  gainXp(amount) {
+    this.xp += amount;
+    while (this.xp >= this.xpToNext) {
+      this.xp      -= this.xpToNext;
+      this.level   += 1;
+      this.xpToNext = this.level * 100;
+      this.maxHp   += 10;
+      this.hp       = Math.min(this.hp + 20, this.maxHp);
+      this.emit('levelup', this.level);
+    }
   }
 
   takeDamage(amount) {
