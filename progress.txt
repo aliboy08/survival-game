@@ -2,8 +2,14 @@ npx serve
 
 character
 
+sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2af8572
+
 - directional movement wasd + analog touch controls for mobile
 - click / tap move
 - walk + idle animations
 
 - enemy
+
+- enemy spawn + hp
+- player shoot
+

@@ -25,3 +25,22 @@ create enemy, for now we don't have sprites for this, just render them in red bo
 it will have hp
 
 create a debug button to spawn the enemy randomly in the screen
+
+add a button on screen to trigger player fire, which will shoot projectile to the closest enemy (create projectile.js) 
+
+allow pointer click control on the analog movement controls ui
+
+pressing down on the shoot ui would shoot continously 
+
+automatically spawn enemies in a time interval, spawn max of 10 enemeies at a time
+
+enemies would spawn at the edge of the screen and move towards the player
+add collision to the enemies
+
+add autoshoot toggle button beside the shoot button, when clicked it would continously shoot (only if there is an enemy in the screen)
+
+the ui will have the highest z-index
+
+add player hp, when the enemy collides with the player it will reduce the players hp
+
+game over when player hp is 0
