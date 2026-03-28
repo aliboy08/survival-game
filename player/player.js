@@ -1,12 +1,13 @@
-import { GameObject }     from '../core/GameObject.js';
+import { GameObject }      from '../core/GameObject.js';
 import { loadPlayerSprites } from './sprite.js';
-import { Movement }         from './movement.js';
+import { Animator }          from './animator.js';
+import { Movement }          from './movement.js';
 
 const SPRITE_SCALE = 2; // 48x48 → 96x96
 const SPRITE_SIZE  = 48;
 
 export class Player extends GameObject {
-  #sprites   = null;
+  #animator  = null;
   #direction = 'south';
   #input;
   #movement  = new Movement();
@@ -21,31 +22,30 @@ export class Player extends GameObject {
   }
 
   async init() {
-    this.#sprites = await loadPlayerSprites();
+    const sprites  = await loadPlayerSprites();
+    this.#animator = new Animator(sprites);
     super.init();
-  }
-
-  get direction() { return this.#direction; }
-
-  set direction(dir) {
-    if (this.#sprites && !(dir in this.#sprites)) {
-      console.warn(`Unknown direction: ${dir}`);
-      return;
-    }
-    this.#direction = dir;
   }
 
   update(dt) {
     const dir = this.#movement.update(this, this.#input, dt);
-    if (dir) this.#direction = dir;
+
+    if (dir) {
+      this.#direction = dir;
+      this.#animator.setState('walk');
+    } else {
+      this.#animator.setState('breathing-idle');
+    }
+
+    this.#animator.update(dt);
     super.update(dt);
   }
 
   draw(ctx) {
-    if (!this.#sprites) return;
+    if (!this.#animator) return;
 
     ctx.drawImage(
-      this.#sprites[this.#direction],
+      this.#animator.getFrame(this.#direction),
       Math.round(this.x - this.width  / 2),
       Math.round(this.y - this.height / 2),
       this.width,
