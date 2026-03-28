@@ -2,6 +2,10 @@ import { GameObject }      from '../core/GameObject.js';
 import { loadPlayerSprites } from './sprite.js';
 import { Animator }          from './animator.js';
 import { Movement }          from './movement.js';
+import { Equipment }         from './Equipment.js';
+import { Rifle }             from '../weapon/guns/Rifle.js';
+import { Pistol }            from '../weapon/guns/Pistol.js';
+import { Sword }             from '../weapon/melee/Sword.js';
 
 const SPRITE_SCALE      = 2; // 48x48 → 96x96
 const SPRITE_SIZE       = 48;
@@ -15,11 +19,12 @@ export class Player extends GameObject {
   #movement        = new Movement();
   #damageCooldown  = 0;
 
-  hp      = MAX_HP;
-  maxHp   = MAX_HP;
-  xp      = 0;
-  xpToNext = 100;
-  level   = 1;
+  hp        = MAX_HP;
+  maxHp     = MAX_HP;
+  xp        = 0;
+  xpToNext  = 100;
+  level     = 1;
+  equipment = new Equipment();
 
   constructor(x, y, input) {
     super();
@@ -28,6 +33,9 @@ export class Player extends GameObject {
     this.width  = SPRITE_SIZE * SPRITE_SCALE;
     this.height = SPRITE_SIZE * SPRITE_SCALE;
     this.#input = input;
+    this.equipment.primary   = new Rifle();
+    this.equipment.secondary = new Pistol();
+    this.equipment.melee     = new Sword();
   }
 
   async init() {
@@ -36,7 +44,8 @@ export class Player extends GameObject {
     super.init();
   }
 
-  set facing(dir) { this.#direction = dir; }
+  get facing()      { return this.#direction; }
+  set facing(dir)   { this.#direction = dir; }
 
   gainXp(amount) {
     this.xp += amount;

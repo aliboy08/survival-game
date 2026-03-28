@@ -1,9 +1,16 @@
 import { GameObject } from '../core/GameObject.js';
-import { Enemy }      from '../enemy/enemy.js';
-import { Bullet }     from '../projectile/Bullet.js';
 import { Laser }      from '../projectile/Laser.js';
 
-const BULLET_FIRE_RATE = 0.15;
+const DIRECTION_VECTORS = {
+  'north':      { x:  0, y: -1 },
+  'north-east': { x:  1, y: -1 },
+  'east':       { x:  1, y:  0 },
+  'south-east': { x:  1, y:  1 },
+  'south':      { x:  0, y:  1 },
+  'south-west': { x: -1, y:  1 },
+  'west':       { x: -1, y:  0 },
+  'north-west': { x: -1, y: -1 },
+};
 
 export class ShootSystem extends GameObject {
   #game;
@@ -37,27 +44,25 @@ export class ShootSystem extends GameObject {
       this.#updateLaser(shouldShoot);
     } else {
       this.#killLaser();
-      this.#updateBullet(dt, shouldShoot);
+      this.#updateGun(dt, shouldShoot);
     }
 
     super.update(dt);
   }
 
-  #updateBullet(dt, shouldShoot) {
+  #updateGun(dt, shouldShoot) {
     if (this.#cooldown > 0) this.#cooldown -= dt;
     if (this.#cooldown > 0 || !shouldShoot) return;
 
-    const enemies = this.#game.getEntities(Enemy);
-    if (enemies.length === 0) return;
+    const player = this.#player;
+    const weapon = player.equipment.primary;
+    if (!weapon) return;
 
-    const player  = this.#player;
-    const closest = enemies.reduce((nearest, enemy) =>
-      Math.hypot(enemy.x - player.x, enemy.y - player.y) <
-      Math.hypot(nearest.x - player.x, nearest.y - player.y) ? enemy : nearest
-    );
+    const dir    = DIRECTION_VECTORS[player.facing] ?? DIRECTION_VECTORS['south'];
+    const target = { x: player.x + dir.x * 100, y: player.y + dir.y * 100 };
 
-    this.#game.add(new Bullet(player.x, player.y, closest, this.#game));
-    this.#cooldown = BULLET_FIRE_RATE;
+    this.#game.add(new weapon.projectile(player.x, player.y, target, this.#game));
+    this.#cooldown = weapon.fireRate;
   }
 
   #updateLaser(shouldShoot) {

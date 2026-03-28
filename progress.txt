@@ -23,3 +23,15 @@ sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2a
 
 - current target indicator
 - the player would automatically face the direction of the of the current target (updating the sprite to face the targets direction)    
+
+- weapons class 
+    - guns
+    - melee
+
+- gun: rifle
+- gun: pistol
+- melee: sword
+
+- player equipment system - slots: primary, secondary, melee
+
+show equipment ui indicator

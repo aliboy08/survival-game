@@ -60,3 +60,19 @@ create "laser" projectile class, it will have size, and damage, it doesn't have 
 udpate laser to not go through an enemy, it will only hit 1 enemy at a time.
 
 add current target indicator, the closest enemy will be locked on as the current target 
+
+create equipment class
+for now available equipment slot will be weapon
+a player will have equipment
+in the weapon slot, assign pistol weapon
+
+update equipment slots to:
+- primary weapon
+- secondary weapon
+- melee weapon
+
+create weapon subclass called "Melee"
+properties: damage, range, attack speed
+create melee weapon called "Sword"
+
+shoot button will now shoot the equipped weapon to the direction the player is facing, regardless if there is no enemy

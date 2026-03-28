@@ -1,37 +1,33 @@
-import { Enemy } from '../enemy/enemy.js';
+import { get_arr_item_class } from '../js/utils.js';
 
 export class DebugPanel {
-  #game;
-  #player;
-  #panel;
+	#game;
+	#player;
+	#panel;
 
-  constructor(game, player) {
-    this.#game   = game;
-    this.#player = player;
-    this.#build();
-  }
+	constructor(game, player) {
+		this.#game = game;
+		this.#player = player;
 
-  #build() {
-    this.#panel = document.createElement('div');
-    this.#panel.id = 'debug-panel';
+		this.enemy_spawner = get_arr_item_class(game.entities, 'EnemySpawner');
 
-    this.#addButton('Spawn Enemy', () => this.#spawnEnemy());
+		this.#build();
+	}
 
-    document.body.appendChild(this.#panel);
-  }
+	#build() {
+		this.#panel = document.createElement('div');
+		this.#panel.id = 'debug-panel';
 
-  #addButton(label, onClick) {
-    const btn = document.createElement('button');
-    btn.textContent = label;
-    btn.addEventListener('click', onClick);
-    this.#panel.appendChild(btn);
-    return btn;
-  }
+		this.#addButton('Spawn Enemy', () => this.enemy_spawner.spawn());
 
-  #spawnEnemy() {
-    const padding = 60;
-    const x = padding + Math.random() * (this.#game.canvas.width  - padding * 2);
-    const y = padding + Math.random() * (this.#game.canvas.height - padding * 2);
-    this.#game.add(new Enemy(x, y, this.#player));
-  }
+		document.body.appendChild(this.#panel);
+	}
+
+	#addButton(label, onClick) {
+		const btn = document.createElement('button');
+		btn.textContent = label;
+		btn.addEventListener('click', onClick);
+		this.#panel.appendChild(btn);
+		return btn;
+	}
 }
