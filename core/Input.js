@@ -4,6 +4,7 @@ const TAP_MAX_MOVE_PX     = 8;
 export class Input {
   #keys           = new Set();
   #joystickVector = { x: 0, y: 0 };
+  #firePressed    = false;
 
   // tap-to-move
   #canvas;
@@ -14,8 +15,11 @@ export class Input {
   constructor(canvas) {
     this.#canvas = canvas;
 
-    window.addEventListener('keydown', (e) => this.#keys.add(e.code));
-    window.addEventListener('keyup',   (e) => this.#keys.delete(e.code));
+    window.addEventListener('keydown', (e) => {
+      this.#keys.add(e.code);
+      if (e.code === 'Space') { e.preventDefault(); this.setFire(); }
+    });
+    window.addEventListener('keyup', (e) => this.#keys.delete(e.code));
 
     canvas.addEventListener('pointerdown', (e) => this.#onPointerDown(e));
     canvas.addEventListener('pointerup',   (e) => this.#onPointerUp(e));
@@ -68,6 +72,14 @@ export class Input {
   // Called by VirtualJoystick with a normalised vector
   setJoystick(x, y) {
     this.#joystickVector = { x, y };
+  }
+
+  setFire() { this.#firePressed = true; }
+
+  consumeFire() {
+    const f = this.#firePressed;
+    this.#firePressed = false;
+    return f;
   }
 
   // Returns the pending tap target and clears it (one-shot)

@@ -8,13 +8,10 @@ export class VirtualJoystick extends GameObject {
   #canvas;
   #input;
 
-  // touch state
-  #touchId  = null;
-  #active   = false;
-
-  // knob offset from centre (pixels)
-  #knobX = 0;
-  #knobY = 0;
+  #pointerId = null;
+  #active    = false;
+  #knobX     = 0;
+  #knobY     = 0;
 
   constructor(canvas, input) {
     super();
@@ -24,66 +21,51 @@ export class VirtualJoystick extends GameObject {
 
   init() {
     const c = this.#canvas;
-    c.addEventListener('touchstart', (e) => this.#onTouchStart(e), { passive: false });
-    c.addEventListener('touchmove',  (e) => this.#onTouchMove(e),  { passive: false });
-    c.addEventListener('touchend',   (e) => this.#onTouchEnd(e),   { passive: false });
-    c.addEventListener('touchcancel',(e) => this.#onTouchEnd(e),   { passive: false });
+    c.addEventListener('pointerdown',   (e) => this.#onPointerDown(e));
+    c.addEventListener('pointermove',   (e) => this.#onPointerMove(e));
+    c.addEventListener('pointerup',     (e) => this.#onPointerUp(e));
+    c.addEventListener('pointercancel', (e) => this.#onPointerUp(e));
     super.init();
   }
 
-  // Centre of the joystick base (bottom-left, fixed)
   get #origin() {
-    return {
-      x: PADDING,
-      y: this.#canvas.height - PADDING,
-    };
+    return { x: PADDING, y: this.#canvas.height - PADDING };
   }
 
-  #onTouchStart(e) {
-    if (this.#touchId !== null) return; // already tracking a touch
-    const o = this.#origin;
-
-    for (const t of e.changedTouches) {
-      const dx = t.clientX - o.x;
-      const dy = t.clientY - o.y;
-      if (Math.hypot(dx, dy) <= OUTER_RADIUS * 1.5) {
-        e.preventDefault();
-        this.#touchId = t.identifier;
-        this.#active  = true;
-        this.#update(t.clientX, t.clientY);
-        return;
-      }
-    }
-  }
-
-  #onTouchMove(e) {
-    if (!this.#active) return;
-    for (const t of e.changedTouches) {
-      if (t.identifier === this.#touchId) {
-        e.preventDefault();
-        this.#update(t.clientX, t.clientY);
-        return;
-      }
-    }
-  }
-
-  #onTouchEnd(e) {
-    for (const t of e.changedTouches) {
-      if (t.identifier === this.#touchId) {
-        this.#touchId = null;
-        this.#active  = false;
-        this.#knobX   = 0;
-        this.#knobY   = 0;
-        this.#input.setJoystick(0, 0);
-        return;
-      }
-    }
-  }
-
-  #update(touchX, touchY) {
+  #onPointerDown(e) {
+    if (this.#pointerId !== null) return;
     const o  = this.#origin;
-    let dx   = touchX - o.x;
-    let dy   = touchY - o.y;
+    const dx = e.clientX - o.x;
+    const dy = e.clientY - o.y;
+
+    if (Math.hypot(dx, dy) <= OUTER_RADIUS * 1.5) {
+      e.preventDefault();
+      this.#pointerId = e.pointerId;
+      this.#active    = true;
+      this.#canvas.setPointerCapture(e.pointerId);
+      this.#updateKnob(e.clientX, e.clientY);
+    }
+  }
+
+  #onPointerMove(e) {
+    if (e.pointerId !== this.#pointerId) return;
+    e.preventDefault();
+    this.#updateKnob(e.clientX, e.clientY);
+  }
+
+  #onPointerUp(e) {
+    if (e.pointerId !== this.#pointerId) return;
+    this.#pointerId = null;
+    this.#active    = false;
+    this.#knobX     = 0;
+    this.#knobY     = 0;
+    this.#input.setJoystick(0, 0);
+  }
+
+  #updateKnob(clientX, clientY) {
+    const o   = this.#origin;
+    let dx    = clientX - o.x;
+    let dy    = clientY - o.y;
     const len = Math.hypot(dx, dy);
 
     if (len > OUTER_RADIUS) {
@@ -100,14 +82,13 @@ export class VirtualJoystick extends GameObject {
   }
 
   update(dt) {
-    // When WASD is held and touch is not active, animate the knob to reflect keyboard input
     if (!this.#active) {
       const { x, y } = this.#input.keyboardMovement;
       if (x !== 0 || y !== 0) {
-        const len    = Math.hypot(x, y);
-        const target = OUTER_RADIUS * 0.65;
-        this.#knobX  = (x / len) * target;
-        this.#knobY  = (y / len) * target;
+        const len   = Math.hypot(x, y);
+        const reach = OUTER_RADIUS * 0.65;
+        this.#knobX = (x / len) * reach;
+        this.#knobY = (y / len) * reach;
       } else {
         this.#knobX = 0;
         this.#knobY = 0;
@@ -121,20 +102,17 @@ export class VirtualJoystick extends GameObject {
 
     ctx.save();
 
-    // Outer ring fill
     ctx.globalAlpha = 0.25;
     ctx.fillStyle   = '#ffffff';
     ctx.beginPath();
     ctx.arc(cx, cy, OUTER_RADIUS, 0, Math.PI * 2);
     ctx.fill();
 
-    // Outer ring border
     ctx.globalAlpha = 0.5;
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth   = 2;
     ctx.stroke();
 
-    // Knob
     ctx.globalAlpha = this.#active ? 0.85 : 0.55;
     ctx.fillStyle   = '#ffffff';
     ctx.beginPath();

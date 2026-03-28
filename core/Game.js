@@ -28,6 +28,10 @@ export class Game {
     this.#entities.delete(entity);
   }
 
+  getEntities(Type) {
+    return [...this.#entities].filter(e => e instanceof Type);
+  }
+
   start() {
     this.#rafId = requestAnimationFrame((t) => this.#loop(t));
   }
@@ -55,6 +59,11 @@ export class Game {
     for (const entity of this.#entities) {
       entity.update(dt);
       entity.draw(this.#ctx);
+    }
+
+    // Auto-remove dead entities
+    for (const entity of this.#entities) {
+      if (entity.dead) this.remove(entity);
     }
 
     this.#rafId = requestAnimationFrame((t) => this.#loop(t));
