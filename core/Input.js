@@ -1,16 +1,12 @@
-const TAP_MAX_DURATION_MS = 250;
-const TAP_MAX_MOVE_PX     = 8;
-
 export class Input {
   #keys           = new Set();
   #joystickVector = { x: 0, y: 0 };
   #shootHeld      = false;
 
-  // tap-to-move
+  // canvas pointer-to-shoot
   #canvas;
-  #tapTarget       = null; // { x, y } in canvas coords, consumed once
-  #pointerDownPos  = null;
-  #pointerDownTime = 0;
+  #canvasPointerHeld   = false;
+  #canvasPointerTarget = null; // { x, y } in canvas coords
 
   constructor(canvas) {
     this.#canvas = canvas;
@@ -21,35 +17,31 @@ export class Input {
     });
     window.addEventListener('keyup', (e) => this.#keys.delete(e.code));
 
-    canvas.addEventListener('pointerdown', (e) => this.#onPointerDown(e));
-    canvas.addEventListener('pointerup',   (e) => this.#onPointerUp(e));
+    canvas.addEventListener('pointerdown',   (e) => this.#onPointerDown(e));
+    canvas.addEventListener('pointermove',   (e) => this.#onPointerMove(e));
+    canvas.addEventListener('pointerup',     (e) => this.#onPointerUp(e));
+    canvas.addEventListener('pointercancel', (e) => this.#onPointerUp(e));
   }
 
   #onPointerDown(e) {
-    // Only primary button / first touch
     if (e.button !== 0 && e.pointerType === 'mouse') return;
-    this.#pointerDownPos  = { x: e.clientX, y: e.clientY };
-    this.#pointerDownTime = performance.now();
+    this.#canvasPointerHeld   = true;
+    this.#canvasPointerTarget = this.#toCanvas(e);
+  }
+
+  #onPointerMove(e) {
+    if (!this.#canvasPointerHeld) return;
+    this.#canvasPointerTarget = this.#toCanvas(e);
   }
 
   #onPointerUp(e) {
-    if (!this.#pointerDownPos) return;
+    this.#canvasPointerHeld   = false;
+    this.#canvasPointerTarget = null;
+  }
 
-    const duration = performance.now() - this.#pointerDownTime;
-    const dx       = e.clientX - this.#pointerDownPos.x;
-    const dy       = e.clientY - this.#pointerDownPos.y;
-    const moved    = Math.hypot(dx, dy);
-
-    this.#pointerDownPos = null;
-
-    if (duration <= TAP_MAX_DURATION_MS && moved <= TAP_MAX_MOVE_PX) {
-      // Convert client coords to canvas coords
-      const rect = this.#canvas.getBoundingClientRect();
-      this.#tapTarget = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-    }
+  #toCanvas(e) {
+    const rect = this.#canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   }
 
   isDown(code) {
@@ -77,14 +69,18 @@ export class Input {
   setShootHeld(val) { this.#shootHeld = val; }
 
   get shootHeld() {
-    return this.#shootHeld || this.isDown('Space');
+    return this.#shootHeld || this.isDown('Space') || this.#canvasPointerHeld;
   }
 
-  // Returns the pending tap target and clears it (one-shot)
-  consumeTapTarget() {
-    const t = this.#tapTarget;
-    this.#tapTarget = null;
-    return t;
+  // Current canvas shoot target while pointer is held (null when released)
+  get canvasShootTarget() {
+    return this.#canvasPointerHeld ? this.#canvasPointerTarget : null;
+  }
+
+  // Called by joystick to suppress canvas shoot when it captures the pointer
+  cancelTap() {
+    this.#canvasPointerHeld   = false;
+    this.#canvasPointerTarget = null;
   }
 
   // Combined keyboard + joystick, clamped to magnitude 1

@@ -88,3 +88,7 @@ enemy hit feedback animation.
 projectile will not home in the target, instead it will shoot straight on the last target position.
 
 create another projectile type that is "homing"
+
+update screen click/tap to shoot on that direction, instead of moving to that direction. Clicking on the ui (controls + buttons) would not trigger this.
+
+homing bullet would home in the closest target if there is no current target

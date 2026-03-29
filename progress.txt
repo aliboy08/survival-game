@@ -48,3 +48,5 @@ sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2a
 
 - new projectile type: homing
 - gun: homing gun
+
+- change screen tap to shoot instead of move

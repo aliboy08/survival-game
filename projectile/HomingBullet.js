@@ -32,6 +32,17 @@ export class HomingBullet extends GameObject {
   update(dt) {
     const speed = Math.hypot(this.#vx, this.#vy);
 
+    // Acquire closest enemy if no live enemy target
+    if (!this.#target || this.#target.dead || !('dead' in this.#target)) {
+      let closest = null;
+      let closestDist = Infinity;
+      for (const enemy of this.#game.getEntities(Enemy)) {
+        const d = Math.hypot(enemy.x - this.x, enemy.y - this.y);
+        if (d < closestDist) { closestDist = d; closest = enemy; }
+      }
+      this.#target = closest;
+    }
+
     // Steer toward live target
     if (this.#target && !this.#target.dead) {
       const dx      = this.#target.x - this.x;

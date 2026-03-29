@@ -122,7 +122,8 @@ export class ShootSystem extends GameObject {
 
     if (this.#cooldown > 0 || !shouldShoot) return;
 
-    const activeTarget = this.#targetIndicator?.target ?? null;
+    const canvasTarget = this.#input.canvasShootTarget;
+    const activeTarget = canvasTarget ?? (this.#targetIndicator?.target ?? null);
     const dir          = DIRECTION_VECTORS[player.facing] ?? DIRECTION_VECTORS['south'];
     const target       = activeTarget ?? { x: player.x + dir.x * 100, y: player.y + dir.y * 100 };
 

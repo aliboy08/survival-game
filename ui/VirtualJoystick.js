@@ -41,6 +41,7 @@ export class VirtualJoystick extends GameObject {
 
     if (Math.hypot(dx, dy) <= OUTER_RADIUS * 1.5) {
       e.preventDefault();
+      this.#input.cancelTap();
       this.#pointerId = e.pointerId;
       this.#active    = true;
       this.#canvas.setPointerCapture(e.pointerId);
