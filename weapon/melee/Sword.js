@@ -8,5 +8,6 @@ export class Sword extends Melee {
 			range:       80,
 			attackSpeed: 1.2,
 		});
+		this.category = 'melee';
 	}
 }

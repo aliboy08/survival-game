@@ -14,5 +14,6 @@ export class Revolver extends Gun {
 			range:           -1,
 			projectileSpeed: -1,
 		});
+		this.category = 'secondary';
 	}
 }

@@ -13,120 +13,188 @@ canvas {
 	display: block;
 }
 
-/* Attack buttons */
+/* Attack buttons — shared base */
 #attack-button,
 #auto-shoot-button {
 	position: fixed;
-	bottom: 30px;
-	width: 80px;
-	height: 80px;
+	bottom: 24px;
+	width: 82px;
+	height: 82px;
 	border-radius: 50%;
-	background: rgba(192, 57, 43, 0.85);
-	border: 3px solid rgba(255, 255, 255, 0.4);
 	color: #fff;
-	font-size: 13px;
+	font-size: 11px;
 	font-weight: bold;
-	letter-spacing: 1px;
+	letter-spacing: 2px;
 	cursor: pointer;
+	z-index: 9999;
+	touch-action: none;
+	user-select: none;
+	transition:
+		transform 0.08s ease,
+		box-shadow 0.08s ease;
+}
+
+/* ATTACK */
+#attack-button {
+	right: 24px;
+	background: radial-gradient(
+		circle at 38% 32%,
+		rgba(255, 95, 75, 0.97),
+		rgba(155, 28, 18, 0.97)
+	);
+	border: 2px solid rgba(255, 120, 100, 0.42);
+	box-shadow:
+		0 0 28px rgba(231, 76, 60, 0.38),
+		0 6px 20px rgba(0, 0, 0, 0.65),
+		inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+#attack-button:active {
+	transform: scale(0.91);
+	box-shadow:
+		0 0 10px rgba(231, 76, 60, 0.18),
+		0 2px 8px rgba(0, 0, 0, 0.65);
+}
+
+#attack-button.reloading {
+	opacity: 0.32;
+	pointer-events: none;
+}
+
+/* AUTO */
+#auto-shoot-button {
+	right: 120px;
+	background: radial-gradient(
+		circle at 38% 32%,
+		rgba(50, 68, 88, 0.97),
+		rgba(18, 26, 36, 0.97)
+	);
+	border: 2px solid rgba(255, 255, 255, 0.12);
+	box-shadow:
+		0 4px 18px rgba(0, 0, 0, 0.65),
+		inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+#auto-shoot-button:active {
+	transform: scale(0.91);
+}
+
+#auto-shoot-button.active {
+	background: radial-gradient(
+		circle at 38% 32%,
+		rgba(50, 210, 110, 0.95),
+		rgba(18, 100, 52, 0.95)
+	);
+	border-color: rgba(80, 220, 140, 0.42);
+	box-shadow:
+		0 0 28px rgba(39, 174, 96, 0.42),
+		0 4px 18px rgba(0, 0, 0, 0.65),
+		inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Weapon select panel */
+#weapon-select-panel {
+	position: fixed;
+	bottom: 140px;
+	right: 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
 	z-index: 9999;
 	touch-action: none;
 	user-select: none;
 }
 
-#attack-button     { right: 30px; }
-#auto-shoot-button { right: 122px; }
-
-#attack-button.reloading {
-	opacity: 0.4;
-	pointer-events: none;
-}
-
-#auto-shoot-button.active {
-	background: rgba(39, 174, 96, 0.9);
-	border-color: rgba(255, 255, 255, 0.8);
-}
-
-/* Weapon select panel */
-#weapon-select-panel {
-  position: fixed;
-  bottom: 140px;
-  right: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  z-index: 9999;
-  touch-action: none;
-  user-select: none;
-}
-
 #weapon-select-label {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 10px;
-  font-family: monospace;
-  letter-spacing: 2px;
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 10px;
+	font-family: monospace;
+	letter-spacing: 2px;
 }
 
 #weapon-select-row {
-  display: flex;
-  gap: 6px;
+	display: flex;
+	gap: 6px;
 }
 
 .weapon-btn {
-  width: 68px;
-  height: 36px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.6);
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 11px;
-  font-weight: bold;
-  font-family: monospace;
-  letter-spacing: 1px;
-  cursor: pointer;
-}
-
-.weapon-btn[data-weapon="bullet"].active {
-  background: rgba(249, 202, 36, 0.25);
-  border-color: #f9ca24;
-  color: #f9ca24;
-}
-
-.weapon-btn[data-weapon="laser"].active {
-  background: rgba(0, 255, 255, 0.15);
-  border-color: #00ffff;
-  color: #00ffff;
-}
-
-/* Reload button */
-#reload-button {
-	position: fixed;
-	bottom: 122px;
-	right: 122px;
-	width: 80px;
+	width: 68px;
 	height: 36px;
 	border-radius: 6px;
 	background: rgba(0, 0, 0, 0.6);
-	border: 2px solid rgba(255, 255, 255, 0.35);
-	color: #fff;
+	border: 2px solid rgba(255, 255, 255, 0.25);
+	color: rgba(255, 255, 255, 0.5);
 	font-size: 11px;
 	font-weight: bold;
 	font-family: monospace;
 	letter-spacing: 1px;
 	cursor: pointer;
+}
+
+.weapon-btn[data-weapon='bullet'].active {
+	background: rgba(249, 202, 36, 0.25);
+	border-color: #f9ca24;
+	color: #f9ca24;
+}
+
+.weapon-btn[data-weapon='laser'].active {
+	background: rgba(0, 255, 255, 0.15);
+	border-color: #00ffff;
+	color: #00ffff;
+}
+
+/* Secondary pill buttons — shared base */
+#reload-button,
+#weapon-switch-button {
+	position: fixed;
+	bottom: 120px;
+	height: 38px;
+	border-radius: 20px;
+	background: rgba(12, 12, 28, 0.88);
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	color: rgba(255, 255, 255, 0.75);
+	font-size: 10px;
+	font-weight: bold;
+	font-family: monospace;
+	letter-spacing: 1.5px;
+	cursor: pointer;
 	z-index: 9999;
 	touch-action: none;
 	user-select: none;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+	transition:
+		background 0.1s,
+		border-color 0.1s,
+		color 0.1s;
+}
+
+#reload-button {
+	right: 120px;
+	width: 82px;
+}
+#weapon-switch-button {
+	right: 24px;
+	width: 82px;
+	font-size: 9px;
+	letter-spacing: 0.5px;
+}
+
+#reload-button:active,
+#weapon-switch-button:active {
+	background: rgba(30, 30, 60, 0.92);
+	border-color: rgba(255, 255, 255, 0.32);
+	color: #fff;
 }
 
 /* Ammo display */
 #ammo-display {
 	position: fixed;
-	bottom: 162px;
-	right: 30px;
-	width: 172px;
+	bottom: 167px;
+	right: 24px;
+	width: 178px;
 	text-align: center;
-	color: #fff;
+	color: rgba(255, 255, 255, 0.85);
 	font-size: 11px;
 	font-family: monospace;
 	font-weight: bold;
@@ -134,31 +202,261 @@ canvas {
 	white-space: nowrap;
 	z-index: 9999;
 	pointer-events: none;
+	background: rgba(0, 0, 0, 0.45);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 10px;
+	padding: 4px 0;
 }
 
 #ammo-display.reloading {
 	color: #f39c12;
+	border-color: rgba(243, 156, 18, 0.25);
 }
 
-/* Weapon switch button */
-#weapon-switch-button {
+/* Equipment select */
+#equip-open-btn {
 	position: fixed;
-	bottom: 122px;
-	right: 30px;
-	width: 80px;
-	height: 36px;
-	border-radius: 6px;
-	background: rgba(0, 0, 0, 0.6);
-	border: 2px solid rgba(255, 255, 255, 0.35);
-	color: #fff;
-	font-size: 11px;
+	top: 170px;
+	left: 12px;
+	width: 82px;
+	height: 38px;
+	border-radius: 20px;
+	background: rgba(12, 12, 28, 0.88);
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	color: rgba(255, 255, 255, 0.7);
+	font-size: 10px;
 	font-weight: bold;
 	font-family: monospace;
-	letter-spacing: 1px;
+	letter-spacing: 2px;
 	cursor: pointer;
 	z-index: 9999;
 	touch-action: none;
 	user-select: none;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+	transition:
+		border-color 0.15s,
+		color 0.15s,
+		background 0.15s;
+}
+
+#equip-open-btn:active {
+	background: rgba(243, 156, 18, 0.14);
+	border-color: rgba(243, 156, 18, 0.55);
+	color: #f39c12;
+}
+
+#equip-overlay {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.82);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	align-items: center;
+	justify-content: center;
+	z-index: 99999;
+	touch-action: none;
+}
+
+#equip-overlay.visible {
+	display: flex;
+	animation: equip-fade-in 0.16s ease;
+}
+
+@keyframes equip-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+#equip-panel {
+	background: rgba(8, 8, 20, 0.98);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 14px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	box-shadow:
+		0 8px 64px rgba(0, 0, 0, 0.9),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	animation: equip-panel-in 0.16s ease;
+	min-width: 440px;
+}
+
+@keyframes equip-panel-in {
+	from {
+		transform: scale(0.93);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+#equip-title-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px 20px 14px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+	background: rgba(255, 255, 255, 0.02);
+}
+
+#equip-title {
+	color: rgba(255, 255, 255, 0.85);
+	font-family: monospace;
+	font-size: 12px;
+	font-weight: bold;
+	letter-spacing: 6px;
+}
+
+#equip-close-btn {
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: rgba(255, 255, 255, 0.45);
+	font-size: 11px;
+	font-family: monospace;
+	font-weight: bold;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition:
+		background 0.12s,
+		color 0.12s;
+}
+
+#equip-close-btn:active {
+	background: rgba(255, 255, 255, 0.14);
+	color: #fff;
+}
+
+#equip-columns {
+	display: flex;
+	padding: 20px 18px 22px;
+	gap: 12px;
+}
+
+.equip-col {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	flex: 1;
+}
+
+.equip-col-header {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	margin-bottom: 2px;
+}
+
+.equip-col-label {
+	color: rgba(255, 255, 255, 0.38);
+	font-family: monospace;
+	font-size: 9px;
+	letter-spacing: 3px;
+}
+
+.equip-col-accent {
+	height: 2px;
+	border-radius: 2px;
+	opacity: 0.85;
+}
+
+.equip-col[data-slot='primary'] .equip-col-accent {
+	background: #f39c12;
+}
+.equip-col[data-slot='secondary'] .equip-col-accent {
+	background: #00c8ff;
+}
+.equip-col[data-slot='melee'] .equip-col-accent {
+	background: #e74c3c;
+}
+
+.equip-weapon-list {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.equip-weapon-btn {
+	width: 100%;
+	padding: 11px 13px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.09);
+	color: rgba(255, 255, 255, 0.5);
+	font-family: monospace;
+	cursor: pointer;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	transition:
+		background 0.1s,
+		border-color 0.1s;
+}
+
+.equip-weapon-btn:active {
+	background: rgba(255, 255, 255, 0.07);
+}
+
+.card-name {
+	font-size: 11px;
+	font-weight: bold;
+	letter-spacing: 2px;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.card-stats {
+	font-size: 9px;
+	letter-spacing: 0.5px;
+	color: rgba(255, 255, 255, 0.28);
+}
+
+/* Active states per slot */
+.equip-col[data-slot='primary'] .equip-weapon-btn.active {
+	background: rgba(243, 156, 18, 0.1);
+	border-color: rgba(243, 156, 18, 0.7);
+	box-shadow: 0 0 14px rgba(243, 156, 18, 0.15);
+}
+.equip-col[data-slot='primary'] .equip-weapon-btn.active .card-name {
+	color: #f39c12;
+}
+.equip-col[data-slot='primary'] .equip-weapon-btn.active .card-stats {
+	color: rgba(243, 156, 18, 0.55);
+}
+
+.equip-col[data-slot='secondary'] .equip-weapon-btn.active {
+	background: rgba(0, 200, 255, 0.08);
+	border-color: rgba(0, 200, 255, 0.65);
+	box-shadow: 0 0 14px rgba(0, 200, 255, 0.14);
+}
+.equip-col[data-slot='secondary'] .equip-weapon-btn.active .card-name {
+	color: #00c8ff;
+}
+.equip-col[data-slot='secondary'] .equip-weapon-btn.active .card-stats {
+	color: rgba(0, 200, 255, 0.55);
+}
+
+.equip-col[data-slot='melee'] .equip-weapon-btn.active {
+	background: rgba(231, 76, 60, 0.1);
+	border-color: rgba(231, 76, 60, 0.7);
+	box-shadow: 0 0 14px rgba(231, 76, 60, 0.15);
+}
+.equip-col[data-slot='melee'] .equip-weapon-btn.active .card-name {
+	color: #e74c3c;
+}
+.equip-col[data-slot='melee'] .equip-weapon-btn.active .card-stats {
+	color: rgba(231, 76, 60, 0.55);
 }
 
 /* Game over screen */

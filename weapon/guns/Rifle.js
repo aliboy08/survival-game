@@ -14,5 +14,6 @@ export class Rifle extends Gun {
 			range:           -1,
 			projectileSpeed: 800,
 		});
+		this.category = 'primary';
 	}
 }

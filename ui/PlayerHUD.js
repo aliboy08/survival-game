@@ -1,10 +1,15 @@
 import { GameObject } from '../core/GameObject.js';
 
-const BAR_WIDTH = 160;
-const BAR_HEIGHT = 14;
-const PADDING = 16;
-const XP_BAR_H = 8;
-const BAR_GAP = 30;
+const BAR_WIDTH  = 160;
+const BAR_HEIGHT = 12;
+const XP_BAR_H   = 6;
+const PADDING    = 16;
+
+const SLOT_COLORS = {
+	primary:   '#f39c12',
+	secondary: '#00c8ff',
+	melee:     '#e74c3c',
+};
 
 export class PlayerHUD extends GameObject {
 	#player;
@@ -15,7 +20,7 @@ export class PlayerHUD extends GameObject {
 		this.layer   = 10;
 		this.#player = player;
 		player.on('levelup', () => {
-			this.#levelUpTimer = 2;
+			this.#levelUpTimer = 2.5;
 		});
 	}
 
@@ -25,79 +30,125 @@ export class PlayerHUD extends GameObject {
 	}
 
 	draw(ctx) {
-		const p = this.#player;
-		const x = PADDING;
-		const y = PADDING;
-		const ratio = Math.max(0, p.hp / p.maxHp);
+		const p   = this.#player;
+		const x   = PADDING;
+		const hpY = PADDING + 6;
 
-		// HP bar background
-		ctx.fillStyle = '#333';
-		ctx.fillRect(x, y, BAR_WIDTH, BAR_HEIGHT);
+		// ── Backdrop panel ──────────────────────────────────────
+		ctx.save();
+		ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+		ctx.beginPath();
+		ctx.roundRect(x - 10, 6, BAR_WIDTH + 26, 148, 10);
+		ctx.fill();
+		ctx.restore();
 
-		// HP bar fill — green → yellow → red
-		ctx.fillStyle =
-			ratio > 0.5 ? '#2ecc71' : ratio > 0.25 ? '#f39c12' : '#e74c3c';
-		ctx.fillRect(x, y, Math.round(BAR_WIDTH * ratio), BAR_HEIGHT);
+		// ── HP bar ───────────────────────────────────────────────
+		const hpRatio = Math.max(0, p.hp / p.maxHp);
+		const hpColor = hpRatio > 0.5 ? '#2ecc71' : hpRatio > 0.25 ? '#f39c12' : '#e74c3c';
 
-		// HP bar border
-		ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-		ctx.lineWidth = 1;
-		ctx.strokeRect(x, y, BAR_WIDTH, BAR_HEIGHT);
+		ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+		ctx.beginPath();
+		ctx.roundRect(x, hpY, BAR_WIDTH, BAR_HEIGHT, BAR_HEIGHT / 2);
+		ctx.fill();
 
-		// HP label
+		const hpFill = Math.max(BAR_HEIGHT, Math.round(BAR_WIDTH * hpRatio));
+		ctx.fillStyle = hpColor;
+		ctx.beginPath();
+		ctx.roundRect(x, hpY, hpFill, BAR_HEIGHT, BAR_HEIGHT / 2);
+		ctx.fill();
+
+		// HP labels
+		const hpLabelY = hpY + BAR_HEIGHT + 12;
+		ctx.font      = '9px monospace';
+		ctx.fillStyle = 'rgba(255,255,255,0.4)';
+		ctx.textAlign = 'left';
+		ctx.fillText('HP', x, hpLabelY);
+
+		ctx.font      = 'bold 10px monospace';
 		ctx.fillStyle = '#fff';
-		ctx.font = 'bold 11px monospace';
-		ctx.textAlign = 'left';
-		ctx.fillText(`HP  ${p.hp} / ${p.maxHp}`, x, y + BAR_HEIGHT + 13);
-
-		// Level label (right-aligned to bar)
 		ctx.textAlign = 'right';
-		ctx.fillText(`Lv. ${p.level}`, x + BAR_WIDTH, y + BAR_HEIGHT + 13);
-		ctx.textAlign = 'left';
+		ctx.fillText(`${p.hp} / ${p.maxHp}`, x + BAR_WIDTH, hpLabelY);
 
-		// XP bar
-		const xpY = y + BAR_HEIGHT + BAR_GAP;
+		ctx.font      = '9px monospace';
+		ctx.fillStyle = 'rgba(255,255,255,0.3)';
+		ctx.fillText(`LV ${p.level}`, x + BAR_WIDTH, hpY - 1);
+
+		// ── XP bar ───────────────────────────────────────────────
 		const xpRatio = Math.max(0, p.xp / p.xpToNext);
+		const xpY     = hpLabelY + 10;
 
-		ctx.fillStyle = '#333';
-		ctx.fillRect(x, xpY, BAR_WIDTH, XP_BAR_H);
+		ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+		ctx.beginPath();
+		ctx.roundRect(x, xpY, BAR_WIDTH, XP_BAR_H, XP_BAR_H / 2);
+		ctx.fill();
 
-		ctx.fillStyle = '#9b59b6';
-		ctx.fillRect(x, xpY, Math.round(BAR_WIDTH * xpRatio), XP_BAR_H);
+		const xpFill = Math.max(XP_BAR_H, Math.round(BAR_WIDTH * xpRatio));
+		ctx.fillStyle = '#8e44ad';
+		ctx.beginPath();
+		ctx.roundRect(x, xpY, xpFill, XP_BAR_H, XP_BAR_H / 2);
+		ctx.fill();
 
-		ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-		ctx.lineWidth = 1;
-		ctx.strokeRect(x, xpY, BAR_WIDTH, XP_BAR_H);
+		// XP label
+		const xpLabelY = xpY + XP_BAR_H + 11;
+		ctx.font      = '9px monospace';
+		ctx.fillStyle = 'rgba(255,255,255,0.35)';
+		ctx.textAlign = 'left';
+		ctx.fillText(`XP  ${p.xp} / ${p.xpToNext}`, x, xpLabelY);
 
-		ctx.fillStyle = 'rgba(255,255,255,0.7)';
-		ctx.font = '9px monospace';
-		ctx.fillText(`XP  ${p.xp} / ${p.xpToNext}`, x, xpY + XP_BAR_H + 11);
+		// ── Divider ───────────────────────────────────────────────
+		const divY = xpLabelY + 10;
+		ctx.fillStyle = 'rgba(255,255,255,0.07)';
+		ctx.fillRect(x, divY, BAR_WIDTH, 1);
 
-		// Equipment
-		const eq = p.equipment;
-		const eqSlots = [
-			{ label: 'PRI', weapon: eq.primary },
-			{ label: 'SEC', weapon: eq.secondary },
-			{ label: 'MEL', weapon: eq.melee },
-		];
-		const eqY = xpY + XP_BAR_H + 40;
-		ctx.font = 'bold 10px monospace';
-		eqSlots.forEach(({ label, weapon }, i) => {
-			const slotY = eqY + i * 14;
-			ctx.fillStyle = weapon ? '#fff' : 'rgba(255,255,255,0.3)';
+		// ── Equipment slots ───────────────────────────────────────
+		const eqStartY = divY + 14;
+		const eq       = p.equipment;
+		const slots    = ['primary', 'secondary', 'melee'];
+		const labels   = { primary: 'PRI', secondary: 'SEC', melee: 'MEL' };
+
+		slots.forEach((key, i) => {
+			const weapon   = eq[key];
+			const isActive = p.activeSlot === key;
+			const color    = SLOT_COLORS[key];
+			const slotY    = eqStartY + i * 16;
+
+			// Active indicator dot
+			if (isActive) {
+				ctx.fillStyle = color;
+				ctx.beginPath();
+				ctx.arc(x - 4, slotY - 3, 2.5, 0, Math.PI * 2);
+				ctx.fill();
+			}
+
+			ctx.font      = isActive ? 'bold 10px monospace' : '9px monospace';
 			ctx.textAlign = 'left';
-			ctx.fillText(`${label}  ${weapon ? weapon.name : '---'}`, x, slotY);
+			ctx.fillStyle = isActive ? color : 'rgba(255,255,255,0.28)';
+			ctx.fillText(labels[key], x + 4, slotY);
+
+			ctx.fillStyle = isActive ? '#fff' : 'rgba(255,255,255,0.35)';
+			ctx.fillText(weapon ? weapon.name : '---', x + 34, slotY);
 		});
 
-		// Level-up notification
+		// ── Level-up notification ────────────────────────────────
 		if (this.#levelUpTimer > 0) {
 			const alpha = Math.min(1, this.#levelUpTimer);
+			const cw    = ctx.canvas.width;
+			const cy    = 72;
 			ctx.save();
 			ctx.globalAlpha = alpha;
-			ctx.font = 'bold 18px monospace';
-			ctx.fillStyle = '#f1c40f';
-			ctx.textAlign = 'left';
-			ctx.fillText(`LEVEL UP!  Lv. ${p.level}`, x, xpY + XP_BAR_H + 26);
+
+			ctx.font        = 'bold 24px monospace';
+			ctx.fillStyle   = '#f1c40f';
+			ctx.shadowColor = '#f1c40f';
+			ctx.shadowBlur  = 24;
+			ctx.textAlign   = 'center';
+			ctx.fillText('LEVEL UP!', cw / 2, cy);
+
+			ctx.shadowBlur  = 0;
+			ctx.font        = '13px monospace';
+			ctx.fillStyle   = 'rgba(255,255,255,0.65)';
+			ctx.fillText(`Level ${p.level}`, cw / 2, cy + 22);
+
 			ctx.restore();
 		}
 

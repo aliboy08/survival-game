@@ -14,5 +14,6 @@ export class Pistol extends Gun {
       range:          400,
       projectileSpeed: 500,
     });
+    this.category = 'secondary';
   }
 }

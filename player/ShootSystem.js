@@ -120,6 +120,7 @@ export class ShootSystem extends GameObject {
       return;
     }
 
+    if (!player.infiniteAmmo && weapon.currentMagazine <= 0) return;
     if (this.#cooldown > 0 || !shouldShoot) return;
 
     const canvasTarget = this.#input.canvasShootTarget;

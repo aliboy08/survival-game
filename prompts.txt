@@ -92,3 +92,17 @@ create another projectile type that is "homing"
 update screen click/tap to shoot on that direction, instead of moving to that direction. Clicking on the ui (controls + buttons) would not trigger this.
 
 homing bullet would home in the closest target if there is no current target
+
+whem the gun's ammo is 0, it shouldn't be allowed to shoot anymore
+
+create equipment select ui, this would allow to select primary, secondary, and melee weapon
+
+primary weapon options would only show weapons with the primary category
+same with secondary and melee
+
+add catgories on weapons:
+Pistol = secondary
+HomingGun = secondary
+Revolver = secondary
+Rifle = primary
+

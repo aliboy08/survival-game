@@ -14,6 +14,7 @@ import { TargetIndicator } from './ui/TargetIndicator.js';
 import { DebugPanel } from './ui/DebugPanel.js';
 import { WeaponSwitchButton } from './ui/WeaponSwitchButton.js';
 import { ReloadButton }       from './ui/ReloadButton.js';
+import { EquipmentSelectUI } from './ui/EquipmentSelectUI.js';
 
 const game = new Game('gameCanvas');
 const input = new Input(game.canvas);
@@ -43,6 +44,7 @@ new ReloadButton(shootSystem);
 new WeaponSwitchButton(player, shootSystem);
 new AutoShootButton(shootSystem);
 // new WeaponSelectUI(selector);
+new EquipmentSelectUI(player);
 new DebugPanel(game, player);
 
 game.start();

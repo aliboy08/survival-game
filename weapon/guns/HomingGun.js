@@ -14,5 +14,6 @@ export class HomingGun extends Gun {
       range:           -1,
       projectileSpeed: 400,
     });
+    this.category = 'secondary';
   }
 }
