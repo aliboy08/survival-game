@@ -30,10 +30,7 @@ export class WeaponSwitchButton {
 	}
 
 	#updateLabel() {
-		const slot   = this.#player.activeSlot;
-		const weapon = this.#player.activeWeapon;
-		const label  = slot.toUpperCase().slice(0, 3);
-		this.#btn.textContent = `${label}: ${weapon ? weapon.name : '---'}`;
+		this.#btn.textContent = 'SWITCH';
 	}
 
 	#tick() {

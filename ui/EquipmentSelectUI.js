@@ -1,13 +1,15 @@
 import { Rifle }     from '../weapon/guns/Rifle.js';
+import { Sniper }    from '../weapon/guns/Sniper.js';
 import { Pistol }    from '../weapon/guns/Pistol.js';
 import { Revolver }  from '../weapon/guns/Revolver.js';
 import { HomingGun } from '../weapon/guns/HomingGun.js';
-import { Sword }     from '../weapon/melee/Sword.js';
+import { Sword }       from '../weapon/melee/Sword.js';
+import { Greatsword }  from '../weapon/melee/Greatsword.js';
 
 const WEAPON_REGISTRY = {
-	primary:   [Rifle],
+	primary:   [Rifle, Sniper],
 	secondary: [Pistol, Revolver, HomingGun],
-	melee:     [Sword],
+	melee:     [Sword, Greatsword],
 };
 
 function getStats(weapon) {
