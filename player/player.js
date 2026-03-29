@@ -5,6 +5,7 @@ import { Movement }          from './movement.js';
 import { Equipment }         from './Equipment.js';
 import { Rifle }             from '../weapon/guns/Rifle.js';
 import { Pistol }            from '../weapon/guns/Pistol.js';
+import { Revolver }          from '../weapon/guns/Revolver.js';
 import { Sword }             from '../weapon/melee/Sword.js';
 
 const SPRITE_SCALE      = 2; // 48x48 → 96x96
@@ -37,7 +38,7 @@ export class Player extends GameObject {
     this.height = SPRITE_SIZE * SPRITE_SCALE;
     this.#input = input;
     this.equipment.primary   = new Rifle();
-    this.equipment.secondary = new Pistol();
+    this.equipment.secondary = new Revolver();
     this.equipment.melee     = new Sword();
   }
 

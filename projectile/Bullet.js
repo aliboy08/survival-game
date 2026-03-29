@@ -6,14 +6,17 @@ export class Bullet extends GameObject {
   #game;
   #size;
   #damage;
+  #range;
+  #distTraveled = 0;
 
-  constructor(x, y, target, game, { velocity = 500, size = 5, damage = 25 } = {}) {
+  constructor(x, y, target, game, { velocity = 500, size = 5, damage = 25, range = -1 } = {}) {
     super();
     this.x       = x;
     this.y       = y;
     this.#game   = game;
     this.#size   = size;
     this.#damage = damage;
+    this.#range  = range;
 
     const dx   = target.x - x;
     const dy   = target.y - y;
@@ -23,8 +26,15 @@ export class Bullet extends GameObject {
   }
 
   update(dt) {
+    const step = Math.hypot(this.#vx, this.#vy) * dt;
     this.x += this.#vx * dt;
     this.y += this.#vy * dt;
+    this.#distTraveled += step;
+
+    if (this.#range !== -1 && this.#distTraveled >= this.#range) {
+      this.dead = true;
+      return;
+    }
 
     const { width, height } = this.#game.canvas;
     if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {

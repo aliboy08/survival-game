@@ -9,6 +9,7 @@ const CONTACT_DAMAGE = 10;
 export class Enemy extends GameObject {
   #healthBar = new HealthBar();
   #player;
+  #hitFlash  = 0;
 
   constructor(x, y, player, { hp = 100, xpReward = 25 } = {}) {
     super();
@@ -26,6 +27,7 @@ export class Enemy extends GameObject {
 
   takeDamage(amount) {
     this.hp = Math.max(0, this.hp - amount);
+    this.#hitFlash = 0.12;
     if (this.isDead) {
       this.#player.gainXp(this.xpReward);
       this.dead = true;
@@ -33,6 +35,7 @@ export class Enemy extends GameObject {
   }
 
   update(dt) {
+    if (this.#hitFlash > 0) this.#hitFlash -= dt;
     this.#moveTowardPlayer(dt);
     this.#checkPlayerCollision();
     super.update(dt);
@@ -72,6 +75,14 @@ export class Enemy extends GameObject {
 
     ctx.fillStyle = '#c0392b';
     ctx.fillRect(left, top, this.width, this.height);
+
+    if (this.#hitFlash > 0) {
+      ctx.save();
+      ctx.globalAlpha = (this.#hitFlash / 0.12) * 0.6;
+      ctx.fillStyle   = '#ffffff';
+      ctx.fillRect(left, top, this.width, this.height);
+      ctx.restore();
+    }
 
     ctx.strokeStyle = '#7b241c';
     ctx.lineWidth   = 2;

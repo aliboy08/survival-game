@@ -80,3 +80,7 @@ shoot button will now shoot the equipped weapon to the direction the player is f
 add weapon switch button, the player would only have 1 active weapon type at a time, clicking the switch button would cycle through orimary, secondary, melee
 
 auto target radius
+
+add range to guns, -1 means infinite range (ends when outside the screen)
+add projectile speed, this will affect how fast the bullet travels, projectile speed = -1 means it will be instant (no travel time) and will hit the enemy immediately (hit scan)
+enemy hit feedback animation.

@@ -126,7 +126,14 @@ export class ShootSystem extends GameObject {
     const dir          = DIRECTION_VECTORS[player.facing] ?? DIRECTION_VECTORS['south'];
     const target       = activeTarget ?? { x: player.x + dir.x * 100, y: player.y + dir.y * 100 };
 
-    this.#game.add(new weapon.projectile(player.x, player.y, target, this.#game));
+    if (weapon.projectileSpeed === -1) {
+      this.#hitscan(player, weapon, target);
+    } else {
+      this.#game.add(new weapon.projectile(
+        player.x, player.y, target, this.#game,
+        { velocity: weapon.projectileSpeed, damage: weapon.damage, range: weapon.range },
+      ));
+    }
     this.#cooldown = weapon.fireRate;
 
     if (!player.infiniteAmmo) weapon.currentMagazine--;
@@ -180,5 +187,34 @@ export class ShootSystem extends GameObject {
       this.#activeLaser.dead = true;
       this.#activeLaser = null;
     }
+  }
+
+  #hitscan(player, weapon, target) {
+    const dx      = target.x - player.x;
+    const dy      = target.y - player.y;
+    const len     = Math.hypot(dx, dy) || 1;
+    const nx      = dx / len;
+    const ny      = dy / len;
+    const maxDist = weapon.range === -1
+      ? Math.max(this.#game.canvas.width, this.#game.canvas.height) * 2
+      : weapon.range;
+
+    let firstEnemy = null;
+    let firstT     = Infinity;
+
+    for (const enemy of this.#game.getEntities(Enemy)) {
+      const ex = enemy.x - player.x;
+      const ey = enemy.y - player.y;
+      const t  = ex * nx + ey * ny;
+      if (t < 0 || t > maxDist) continue;
+      const perpX = ex - t * nx;
+      const perpY = ey - t * ny;
+      if (Math.hypot(perpX, perpY) < enemy.width / 2 && t < firstT) {
+        firstT     = t;
+        firstEnemy = enemy;
+      }
+    }
+
+    if (firstEnemy) firstEnemy.takeDamage(weapon.damage);
   }
 }
