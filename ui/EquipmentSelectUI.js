@@ -1,10 +1,11 @@
-import { Rifle }     from '../weapon/guns/Rifle.js';
-import { Sniper }    from '../weapon/guns/Sniper.js';
-import { Pistol }    from '../weapon/guns/Pistol.js';
-import { Revolver }  from '../weapon/guns/Revolver.js';
-import { HomingGun } from '../weapon/guns/HomingGun.js';
-import { Sword }       from '../weapon/melee/Sword.js';
-import { Greatsword }  from '../weapon/melee/Greatsword.js';
+import { Rifle }      from '../weapon/guns/Rifle.js';
+import { Sniper }     from '../weapon/guns/Sniper.js';
+import { Pistol }     from '../weapon/guns/Pistol.js';
+import { Revolver }   from '../weapon/guns/Revolver.js';
+import { HomingGun }  from '../weapon/guns/HomingGun.js';
+import { Sword }      from '../weapon/melee/Sword.js';
+import { Greatsword } from '../weapon/melee/Greatsword.js';
+import { ModSelectUI } from './ModSelectUI.js';
 
 const WEAPON_REGISTRY = {
 	primary:   [Rifle, Sniper],
@@ -23,6 +24,8 @@ export class EquipmentSelectUI {
 	#player;
 	#overlay;
 	#slotLists = {};
+	#modBtns   = {};
+	#modUI     = new ModSelectUI();
 
 	constructor(player) {
 		this.#player = player;
@@ -94,11 +97,23 @@ export class EquipmentSelectUI {
 			list.className = 'equip-weapon-list';
 
 			for (const WeaponClass of weaponClasses) {
-				const card = this.#buildCard(WeaponClass, slot);
-				list.appendChild(card);
+				list.appendChild(this.#buildCard(WeaponClass, slot));
 			}
 
 			col.appendChild(list);
+
+			// MOD button for this slot
+			const modBtn = document.createElement('button');
+			modBtn.className = 'equip-mod-btn';
+			modBtn.addEventListener('pointerdown', (e) => {
+				e.stopPropagation();
+				const weapon = this.#player.equipment[slot];
+				if (!weapon) return;
+				this.#modUI.open(weapon, () => this.#refreshModBtns());
+			});
+			col.appendChild(modBtn);
+			this.#modBtns[slot] = modBtn;
+
 			cols.appendChild(col);
 			this.#slotLists[slot] = list;
 		}
@@ -137,6 +152,7 @@ export class EquipmentSelectUI {
 	#equip(slot, WeaponClass) {
 		this.#player.equipment[slot] = new WeaponClass();
 		this.#refreshHighlights();
+		this.#refreshModBtns();
 		this.#player.emit('weaponswitch', this.#player.activeSlot);
 	}
 
@@ -146,6 +162,20 @@ export class EquipmentSelectUI {
 			for (const btn of list.querySelectorAll('.equip-weapon-btn')) {
 				btn.classList.toggle('active', !!current && btn.dataset.weapon === current.name);
 			}
+		}
+	}
+
+	#refreshModBtns() {
+		for (const [slot, btn] of Object.entries(this.#modBtns)) {
+			const weapon = this.#player.equipment[slot];
+			if (!weapon) {
+				btn.textContent = 'MODS';
+				btn.disabled = true;
+				return;
+			}
+			const count = weapon.modSlots.count;
+			btn.textContent = `MODS  ${count} / 6`;
+			btn.disabled = false;
 		}
 	}
 
@@ -159,6 +189,7 @@ export class EquipmentSelectUI {
 
 	#open() {
 		this.#refreshHighlights();
+		this.#refreshModBtns();
 		this.#overlay.classList.add('visible');
 	}
 

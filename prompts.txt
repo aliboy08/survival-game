@@ -106,3 +106,18 @@ HomingGun = secondary
 Revolver = secondary
 Rifle = primary
 
+
+create "mods" folder, in here we are going to create Mods system
+mods are upgrades that can be assigned to weapons which are going to modify or improve its stats and add additional functions.
+A weapon will have 6 available mod slots
+
+for now create these mods:
+- Damage: increase weapons damage
+- Fire rate: increase weapons fire rate
+- Reload: shorten weapons reload time
+- Fire: add fire damage to the weapon
+- Electric: add electric damage to the weapon
+- Cold: add cold damage to the weapon
+- Toxic: add toxic/poison damage to the weapon
+
+add ui to assign mods to a weapon
