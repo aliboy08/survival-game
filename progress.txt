@@ -44,3 +44,7 @@ sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2a
 
 - gun projectile speed + hit scan + range 
 - enemy hit feedback animation
+- gun: revolver (hit scan)
+
+- new projectile type: homing
+- gun: homing gun

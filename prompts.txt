@@ -84,3 +84,7 @@ auto target radius
 add range to guns, -1 means infinite range (ends when outside the screen)
 add projectile speed, this will affect how fast the bullet travels, projectile speed = -1 means it will be instant (no travel time) and will hit the enemy immediately (hit scan)
 enemy hit feedback animation.
+
+projectile will not home in the target, instead it will shoot straight on the last target position.
+
+create another projectile type that is "homing"
