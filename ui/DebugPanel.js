@@ -30,8 +30,9 @@ export class DebugPanel {
 		});
 
 		this.#addButton('Spawn Enemy', () => this.enemy_spawner.spawn());
-		this.#addToggle('God Mode',      () => this.#player.godMode,      v => this.#player.godMode      = v);
-		this.#addToggle('Infinite Ammo', () => this.#player.infiniteAmmo, v => this.#player.infiniteAmmo = v);
+		this.#addToggle('God Mode',        () => this.#player.godMode,                   v => this.#player.godMode                   = v);
+		this.#addToggle('Infinite Ammo',   () => this.#player.infiniteAmmo,              v => this.#player.infiniteAmmo              = v);
+		this.#addToggle('Skill No Cooldown', () => this.#player.skillSlots.noCooldown,   v => this.#player.skillSlots.noCooldown     = v);
 
 		document.body.appendChild(this.#panel);
 	}

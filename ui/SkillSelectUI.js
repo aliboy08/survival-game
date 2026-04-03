@@ -5,8 +5,9 @@ import { Frenzy }     from '../skills/buff/Frenzy.js';
 import { Shield }     from '../skills/buff/Shield.js';
 import { Overclock }  from '../skills/buff/Overclock.js';
 import { Bloodlust }  from '../skills/buff/Bloodlust.js';
-import { Adrenaline } from '../skills/buff/Adrenaline.js';
-import { FrostDome }  from '../skills/cc/FrostDome.js';
+import { Adrenaline }   from '../skills/buff/Adrenaline.js';
+import { Invisibility } from '../skills/buff/Invisibility.js';
+import { FrostDome }    from '../skills/cc/FrostDome.js';
 
 const SKILL_POOL = [
 	{ factory: () => new Nova(),       color: '#e74c3c', label: 'DMG' },
@@ -16,8 +17,9 @@ const SKILL_POOL = [
 	{ factory: () => new Shield(),     color: '#3498db', label: 'BUFF' },
 	{ factory: () => new Overclock(),  color: '#f1c40f', label: 'BUFF' },
 	{ factory: () => new Bloodlust(),  color: '#e74c3c', label: 'BUFF' },
-	{ factory: () => new Adrenaline(), color: '#2ecc71', label: 'BUFF' },
-	{ factory: () => new FrostDome(),  color: '#00c8ff', label: 'CC' },
+	{ factory: () => new Adrenaline(),   color: '#2ecc71', label: 'BUFF' },
+	{ factory: () => new Invisibility(), color: '#8e44ad', label: 'BUFF' },
+	{ factory: () => new FrostDome(),    color: '#00c8ff', label: 'CC' },
 ];
 
 function injectStyles() {

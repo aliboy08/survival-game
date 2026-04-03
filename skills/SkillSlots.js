@@ -6,6 +6,8 @@ export class SkillSlots {
 	#activeTimers;
 	#channeling;
 
+	noCooldown = false;
+
 	constructor() {
 		this.#slots        = new Array(MAX_SKILL_SLOTS).fill(null);
 		this.#cooldowns    = new Array(MAX_SKILL_SLOTS).fill(0);
@@ -39,7 +41,7 @@ export class SkillSlots {
 		// Toggle channeling off
 		if (skill.channeling && this.#channeling[index]) {
 			this.#stopActive(index, player, game);
-			this.#cooldowns[index] = skill.cooldown;
+			if (!this.noCooldown) this.#cooldowns[index] = skill.cooldown;
 			return true;
 		}
 
@@ -55,7 +57,7 @@ export class SkillSlots {
 			this.#activeTimers[index] = skill.duration;
 		} else {
 			// instant — cooldown starts immediately
-			this.#cooldowns[index] = skill.cooldown;
+			if (!this.noCooldown) this.#cooldowns[index] = skill.cooldown;
 		}
 
 		return true;
@@ -76,7 +78,7 @@ export class SkillSlots {
 				const drain = skill.drainRate * dt;
 				if (player.energy < drain) {
 					this.#stopActive(i, player, game);
-					this.#cooldowns[i] = skill.cooldown;
+					if (!this.noCooldown) this.#cooldowns[i] = skill.cooldown;
 				} else {
 					player.energy -= drain;
 					skill.update(dt, player, game);
@@ -87,7 +89,7 @@ export class SkillSlots {
 				skill.update(dt, player, game);
 				if (this.#activeTimers[i] <= 0) {
 					this.#stopActive(i, player, game);
-					this.#cooldowns[i] = skill.cooldown;
+					if (!this.noCooldown) this.#cooldowns[i] = skill.cooldown;
 				}
 			}
 		}

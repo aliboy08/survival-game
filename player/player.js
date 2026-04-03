@@ -36,6 +36,7 @@ export class Player extends GameObject {
 	godMode = false;
 	infiniteAmmo = false;
 	shielded = false;
+	invisible = false;
 	speedMultiplier = 1.0;
 
 	constructor(x, y, input) {
@@ -113,6 +114,7 @@ export class Player extends GameObject {
 	draw(ctx) {
 		if (!this.#animator) return;
 
+		if (this.invisible) ctx.globalAlpha = 0.3;
 		ctx.drawImage(
 			this.#animator.getFrame(this.#direction),
 			Math.round(this.x - this.width / 2),
@@ -120,6 +122,7 @@ export class Player extends GameObject {
 			this.width,
 			this.height,
 		);
+		if (this.invisible) ctx.globalAlpha = 1.0;
 
 		super.draw(ctx);
 	}

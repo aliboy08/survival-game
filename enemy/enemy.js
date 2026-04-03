@@ -46,6 +46,7 @@ export class Enemy extends GameObject {
   }
 
   #moveTowardPlayer(dt) {
+    if (this.#player.invisible) return;
     const dx   = this.#player.x - this.x;
     const dy   = this.#player.y - this.y;
     const dist = Math.hypot(dx, dy);
@@ -57,6 +58,7 @@ export class Enemy extends GameObject {
   }
 
   #checkPlayerCollision() {
+    if (this.#player.invisible) return;
     const p        = this.#player;
     const halfW    = (this.width  + p.width)  / 2;
     const halfH    = (this.height + p.height) / 2;
