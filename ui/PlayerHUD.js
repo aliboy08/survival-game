@@ -1,10 +1,11 @@
 import { GameObject } from '../core/GameObject.js';
 
-const BAR_WIDTH   = 160;
-const BAR_HEIGHT  = 12;
+const BAR_WIDTH    = 160;
+const BAR_HEIGHT   = 12;
+const SHIELD_BAR_H = 8;
 const ENERGY_BAR_H = 8;
-const XP_BAR_H    = 6;
-const PADDING     = 16;
+const XP_BAR_H     = 6;
+const PADDING      = 16;
 
 const SLOT_COLORS = {
 	primary:   '#f39c12',
@@ -39,7 +40,7 @@ export class PlayerHUD extends GameObject {
 		ctx.save();
 		ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
 		ctx.beginPath();
-		ctx.roundRect(x - 10, 6, BAR_WIDTH + 26, 168, 10);
+		ctx.roundRect(x - 10, 6, BAR_WIDTH + 26, 197, 10);
 		ctx.fill();
 		ctx.restore();
 
@@ -74,9 +75,35 @@ export class PlayerHUD extends GameObject {
 		ctx.fillStyle = 'rgba(255,255,255,0.3)';
 		ctx.fillText(`LV ${p.level}`, x + BAR_WIDTH, hpY - 1);
 
+		// ── Shield bar ───────────────────────────────────────────
+		const shieldRatio = Math.max(0, p.shield / p.maxShield);
+		const shieldY     = hpLabelY + 10;
+
+		ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+		ctx.beginPath();
+		ctx.roundRect(x, shieldY, BAR_WIDTH, SHIELD_BAR_H, SHIELD_BAR_H / 2);
+		ctx.fill();
+
+		const shieldFill = Math.max(SHIELD_BAR_H, Math.round(BAR_WIDTH * shieldRatio));
+		ctx.fillStyle = '#5dade2';
+		ctx.beginPath();
+		ctx.roundRect(x, shieldY, shieldFill, SHIELD_BAR_H, SHIELD_BAR_H / 2);
+		ctx.fill();
+
+		const shieldLabelY = shieldY + SHIELD_BAR_H + 11;
+		ctx.font      = '9px monospace';
+		ctx.fillStyle = 'rgba(255,255,255,0.35)';
+		ctx.textAlign = 'left';
+		ctx.fillText('SHD', x, shieldLabelY);
+
+		ctx.font      = 'bold 10px monospace';
+		ctx.fillStyle = '#5dade2';
+		ctx.textAlign = 'right';
+		ctx.fillText(`${Math.floor(p.shield)} / ${p.maxShield}`, x + BAR_WIDTH, shieldLabelY);
+
 		// ── Energy bar ───────────────────────────────────────────
 		const energyRatio = Math.max(0, p.energy / p.maxEnergy);
-		const energyY     = hpLabelY + 10;
+		const energyY     = shieldLabelY + 10;
 
 		ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
 		ctx.beginPath();

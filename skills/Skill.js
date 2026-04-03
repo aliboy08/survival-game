@@ -13,6 +13,11 @@ export class Skill {
 		this.strength    = strength;   // effectiveness — damage, buff magnitude, etc. (0 = N/A)
 	}
 
+	/** Returns strength scaled by the player's skillStrengthMult. */
+	effectiveStrength(player) {
+		return this.strength * (player?.skillStrengthMult ?? 1);
+	}
+
 	/** Called when the skill is activated. */
 	activate(player, game) {}
 

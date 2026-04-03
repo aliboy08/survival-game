@@ -153,3 +153,26 @@ enemies that enter the dome will be slowed, then frozen after some duration.
 add "strength" property to the skills. this affects damage or effectiveness of the skill.
 
 update "Adrenaline" skill to add indicator leaving a trail of light indicating the speed increase
+
+add "Invisibility" skill, when activated the character becomes  invisible, enemies won't be able to see and target the player.  opacity styling is applied to the player.
+
+add mods for the player and skills, these mods will apply to the player skills.
+
+These are the mods:
+- strength: increase strength which increases skill damage or effectiveness
+- duration: increase skill duration
+- cooldown: decrease skill cooldown
+- efficiency: reduce the energy cost
+- energy: increase player's max energy
+- hp: increase player's max hp
+- armor: increase player's armor
+- shield - increase max shield
+- shield regen - increase shield regen rate
+
+
+
+add shield system, add bar below hp.
+When player is damaged, it will reduce the shield instead, preventing hp damage. when the shield runs out, damage will go to the hp.
+Shield regenerates after not taking damage for awhile. taking any damage will stop the regeneration.
+
+add armor system, add armor stat to the player. This reduces the damage done to the player.

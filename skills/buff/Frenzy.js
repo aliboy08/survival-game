@@ -22,7 +22,7 @@ export class Frenzy extends Skill {
 		for (const weapon of [primary, secondary, melee]) {
 			if (weapon instanceof Gun) {
 				this.#saved.set(weapon, weapon.fireRate);
-				weapon.fireRate = weapon.fireRate / this.strength; // lower = faster
+				weapon.fireRate = weapon.fireRate / this.effectiveStrength(player); // lower = faster
 			}
 		}
 	}

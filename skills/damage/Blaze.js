@@ -19,7 +19,7 @@ export class Blaze extends Skill {
 	update(dt, player, game) {
 		for (const enemy of game.getEntities(Enemy)) {
 			const dist = Math.hypot(enemy.x - player.x, enemy.y - player.y);
-			if (dist <= this.range) enemy.takeDamage(this.strength * dt);
+			if (dist <= this.range) enemy.takeDamage(this.effectiveStrength(player) * dt);
 		}
 	}
 }

@@ -37,7 +37,16 @@ export class Player extends GameObject {
 	infiniteAmmo = false;
 	shielded = false;
 	invisible = false;
-	speedMultiplier = 1.0;
+	speedMultiplier   = 1.0;
+	skillStrengthMult = 1.0;
+
+	maxShield       = 50;
+	shield          = 50;
+	shieldRegen     = 8;   // per second
+	shieldRegenDelay = 5;  // seconds after last hit before regen starts
+	armor           = 0;   // flat damage reduction
+
+	#shieldRegenTimer = 0;
 
 	constructor(x, y, input) {
 		super();
@@ -90,13 +99,27 @@ export class Player extends GameObject {
 	takeDamage(amount) {
 		if (this.godMode || this.shielded) return;
 		if (this.#damageCooldown > 0) return;
-		this.hp = Math.max(0, this.hp - amount);
-		this.#damageCooldown = DAMAGE_COOLDOWN;
+
+		const effective = Math.max(1, amount - this.armor);
+
+		const absorbed = Math.min(this.shield, effective);
+		this.shield -= absorbed;
+		const overflow = effective - absorbed;
+		if (overflow > 0) this.hp = Math.max(0, this.hp - overflow);
+
+		this.#shieldRegenTimer = this.shieldRegenDelay;
+		this.#damageCooldown   = DAMAGE_COOLDOWN;
 		if (this.hp === 0) this.emit('dead');
 	}
 
 	update(dt) {
 		if (this.#damageCooldown > 0) this.#damageCooldown -= dt;
+
+		if (this.#shieldRegenTimer > 0) {
+			this.#shieldRegenTimer -= dt;
+		} else if (this.shield < this.maxShield) {
+			this.shield = Math.min(this.maxShield, this.shield + this.shieldRegen * dt);
+		}
 
 		const dir = this.#movement.update(this, this.#input, dt);
 

@@ -88,4 +88,10 @@ skill properties:
 "Adrenalie" (warframe volt speed skill)
 - increse move speed and fire rate
 
+===
+
 "Invisibility" skill
+
+- armor system (reduce damage)
+- shield system
+- player & skill mods

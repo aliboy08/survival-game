@@ -40,7 +40,7 @@ export class Shockwave extends Skill {
 			const dist = Math.hypot(dx, dy);
 			if (dist === 0 || dist > this.range) continue;
 			const dot = (dx / dist) * fx + (dy / dist) * fy;
-			if (dot >= minDot) enemy.takeDamage(this.strength);
+			if (dot >= minDot) enemy.takeDamage(this.effectiveStrength(player));
 		}
 	}
 }

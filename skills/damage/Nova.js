@@ -17,7 +17,7 @@ export class Nova extends Skill {
 	activate(player, game) {
 		for (const enemy of game.getEntities(Enemy)) {
 			const dist = Math.hypot(enemy.x - player.x, enemy.y - player.y);
-			if (dist <= this.range) enemy.takeDamage(this.strength);
+			if (dist <= this.range) enemy.takeDamage(this.effectiveStrength(player));
 		}
 	}
 }

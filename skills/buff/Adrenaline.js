@@ -68,14 +68,15 @@ export class Adrenaline extends Skill {
 	}
 
 	activate(player, game) {
-		player.speedMultiplier = this.strength;
+		const str = this.effectiveStrength(player);
+		player.speedMultiplier = str;
 
 		this.#savedRates.clear();
 		const { primary, secondary, melee } = player.equipment;
 		for (const weapon of [primary, secondary, melee]) {
 			if (weapon instanceof Gun) {
 				this.#savedRates.set(weapon, weapon.fireRate);
-				weapon.fireRate = weapon.fireRate / this.strength;
+				weapon.fireRate = weapon.fireRate / str;
 			}
 		}
 

@@ -17,7 +17,7 @@ export class Bloodlust extends Skill {
 
 	activate(player, game) {
 		this.#killHandler = () => {
-			player.hp = Math.min(player.maxHp, player.hp + this.strength);
+			player.hp = Math.min(player.maxHp, player.hp + this.effectiveStrength(player));
 		};
 		player.on('kill', this.#killHandler);
 	}
