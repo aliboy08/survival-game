@@ -1,7 +1,6 @@
 import { Skill }  from '../Skill.js';
 import { Enemy }  from '../../enemy/enemy.js';
 
-const RANGE    = 200;
 const HALF_FOV = Math.PI / 4; // 45° half-angle → 90° total cone
 
 const FACING_VECTORS = {
@@ -23,7 +22,8 @@ export class Shockwave extends Skill {
 			category:    'damage',
 			energyCost:  25,
 			cooldown:    6,
-			damage:      60,
+			range:       200,
+			strength:    60,
 		});
 	}
 
@@ -38,9 +38,9 @@ export class Shockwave extends Skill {
 			const dx   = enemy.x - player.x;
 			const dy   = enemy.y - player.y;
 			const dist = Math.hypot(dx, dy);
-			if (dist === 0 || dist > RANGE) continue;
+			if (dist === 0 || dist > this.range) continue;
 			const dot = (dx / dist) * fx + (dy / dist) * fy;
-			if (dot >= minDot) enemy.takeDamage(this.damage);
+			if (dot >= minDot) enemy.takeDamage(this.strength);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 const SLOT_COLORS = {
 	damage: '#e74c3c',
 	buff:   '#3498db',
+	cc:     '#00c8ff',
 };
 
 function injectStyles() {

@@ -62,49 +62,28 @@ sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2a
 
 mods: damage, fire rate, reload, fire, electric, cold, toxic
 
-skills system
+* energy / mana system
+
+* skills system
+- select up to 4 skills
 
 skils categories:
 - damage
 - buff
 
-placeholder skills:
-#: 1
-Name: Nova
-Category: Damage
-Description: Burst of energy damages all nearby enemies
-────────────────────────────────────────
-#: 2
-Name: Shockwave
-Category: Damage
-Description: Damages enemies in a forward cone
-────────────────────────────────────────
-#: 3
-Name: Blaze
-Category: Damage
-Description: Channels fire around player, drains energy
-────────────────────────────────────────
-#: 4
-Name: Frenzy
-Category: Buff
-Description: Doubles fire rate
-────────────────────────────────────────
-#: 5
-Name: Shield
-Category: Buff
-Description: Damage immunity
-────────────────────────────────────────
-#: 6
-Name: Overclock
-Category: Buff
-Description: Instant full reload + no reload for duration 
-────────────────────────────────────────
-#: 7
-Name: Bloodlust
-Category: Buff
-Description: Heals player on each kill
-────────────────────────────────────────
-#: 8
-Name: Adrenaline
-Category: Buff
-Description: Greatly increases movement speed
+skill properties:
+- energy cost (cost to activate the skill)
+- cooldown (time before it can be cast again)
+- duration (if applicable)
+- damage (if applicable)
+- channeling (if applicable, drains energy until toggled off)
+- range (affects range/radius)
+- strength (affects damage & effectiveness)
+
+* added 8 placeholder skill
+
+"Frost Dome" (warframe - frost ice globe skill)
+- creates a stationary dome. Enemies inside are slowed, then frozen.
+
+"Adrenalie" (warframe volt speed skill)
+- increse move speed and fire rate

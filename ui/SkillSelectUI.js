@@ -6,6 +6,7 @@ import { Shield }     from '../skills/buff/Shield.js';
 import { Overclock }  from '../skills/buff/Overclock.js';
 import { Bloodlust }  from '../skills/buff/Bloodlust.js';
 import { Adrenaline } from '../skills/buff/Adrenaline.js';
+import { FrostDome }  from '../skills/cc/FrostDome.js';
 
 const SKILL_POOL = [
 	{ factory: () => new Nova(),       color: '#e74c3c', label: 'DMG' },
@@ -16,6 +17,7 @@ const SKILL_POOL = [
 	{ factory: () => new Overclock(),  color: '#f1c40f', label: 'BUFF' },
 	{ factory: () => new Bloodlust(),  color: '#e74c3c', label: 'BUFF' },
 	{ factory: () => new Adrenaline(), color: '#2ecc71', label: 'BUFF' },
+	{ factory: () => new FrostDome(),  color: '#00c8ff', label: 'CC' },
 ];
 
 function injectStyles() {
@@ -296,6 +298,8 @@ export class SkillSelectUI {
 		if (skill.drainRate > 0)   parts.push(`${skill.drainRate}/s`);
 		parts.push(`${skill.cooldown}s CD`);
 		if (skill.duration > 0)    parts.push(`${skill.duration}s DUR`);
+		if (skill.range > 0)       parts.push(`${skill.range}px`);
+		if (skill.strength > 0)    parts.push(`STR ${skill.strength}`);
 		if (skill.channeling)      parts.push('CHANNEL');
 		return parts.join('  ·  ');
 	}

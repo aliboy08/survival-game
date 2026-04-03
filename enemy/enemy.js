@@ -11,6 +11,9 @@ export class Enemy extends GameObject {
   #player;
   #hitFlash  = 0;
 
+  speedMultiplier = 1.0;
+  frozen          = false;
+
   constructor(x, y, player, { hp = 100, xpReward = 25 } = {}) {
     super();
     this.x         = x;
@@ -48,8 +51,9 @@ export class Enemy extends GameObject {
     const dist = Math.hypot(dx, dy);
     if (dist === 0) return;
 
-    this.x += (dx / dist) * SPEED * dt;
-    this.y += (dy / dist) * SPEED * dt;
+    const speed = SPEED * this.speedMultiplier;
+    this.x += (dx / dist) * speed * dt;
+    this.y += (dy / dist) * speed * dt;
   }
 
   #checkPlayerCollision() {
@@ -76,6 +80,20 @@ export class Enemy extends GameObject {
 
     ctx.fillStyle = '#c0392b';
     ctx.fillRect(left, top, this.width, this.height);
+
+    if (this.frozen) {
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle   = '#00c8ff';
+      ctx.fillRect(left, top, this.width, this.height);
+      ctx.restore();
+    } else if (this.speedMultiplier < 1.0) {
+      ctx.save();
+      ctx.globalAlpha = 0.3;
+      ctx.fillStyle   = '#00c8ff';
+      ctx.fillRect(left, top, this.width, this.height);
+      ctx.restore();
+    }
 
     if (this.#hitFlash > 0) {
       ctx.save();

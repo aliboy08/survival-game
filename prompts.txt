@@ -121,3 +121,35 @@ for now create these mods:
 - Toxic: add toxic/poison damage to the weapon
 
 add ui to assign mods to a weapon
+
+
+lets add skills system.
+create a folder named skills, put the codes there. The player will have 4 slots for skills. We select what skills to put on each slot.
+The player will have energy bar (below health)
+using a skill will consume energy.
+
+Skill categories:
+- damage
+- buff
+
+Properties of a skill:
+- name
+- description
+- energy cost (cost to activate the skill)
+- cooldown (time before it can be cast again)
+- duration (if applicable)
+- damage (if applicable)
+- channeling (if applicable, drains energy until toggled off)
+
+
+please suggest 8 skills as placeholders
+
+add "range" property to the skills, this affects the range or radius of a skill
+
+add skill called "Frost Dome"
+when cast, it will create a stationary dome around the player
+enemies that enter the dome will be slowed, then frozen after some duration.
+
+add "strength" property to the skills. this affects damage or effectiveness of the skill.
+
+update "Adrenaline" skill to add indicator leaving a trail of light indicating the speed increase

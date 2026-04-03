@@ -12,6 +12,7 @@ export class Frenzy extends Skill {
 			energyCost:  35,
 			cooldown:    12,
 			duration:    5,
+			strength:    2, // fire rate multiplier
 		});
 	}
 
@@ -21,7 +22,7 @@ export class Frenzy extends Skill {
 		for (const weapon of [primary, secondary, melee]) {
 			if (weapon instanceof Gun) {
 				this.#saved.set(weapon, weapon.fireRate);
-				weapon.fireRate = weapon.fireRate / 2; // lower = faster
+				weapon.fireRate = weapon.fireRate / this.strength; // lower = faster
 			}
 		}
 	}
