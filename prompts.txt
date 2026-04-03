@@ -176,3 +176,10 @@ When player is damaged, it will reduce the shield instead, preventing hp damage.
 Shield regenerates after not taking damage for awhile. taking any damage will stop the regeneration.
 
 add armor system, add armor stat to the player. This reduces the damage done to the player.
+
+add "Teleport" skill
+
+- on activate button, it will enter a target mode, which changes the cursor. the second activate will confirm the destination.
+
+- on activate button tap twice(within 200ms), teleport the player randomly around a radius from player's inital position
+

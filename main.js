@@ -11,6 +11,7 @@ import { PlayerHUD } from './ui/PlayerHUD.js';
 import { GameOverScreen } from './ui/GameOverScreen.js';
 import { TargetIndicator } from './ui/TargetIndicator.js';
 import { DebugPanel } from './ui/DebugPanel.js';
+import { PlayerModSelectUI } from './ui/PlayerModSelectUI.js';
 import { WeaponSwitchButton } from './ui/WeaponSwitchButton.js';
 import { ReloadButton } from './ui/ReloadButton.js';
 import { EquipmentSelectUI } from './ui/EquipmentSelectUI.js';
@@ -54,6 +55,7 @@ new ReloadButton(shootSystem);
 new WeaponSwitchButton(player, shootSystem);
 new AutoShootButton(shootSystem);
 new EquipmentSelectUI(player, weapons_manager);
+new PlayerModSelectUI(player);
 new DebugPanel(game, player);
 
 game.start();

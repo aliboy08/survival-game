@@ -216,7 +216,7 @@ canvas {
 /* Equipment select */
 #equip-open-btn {
 	position: fixed;
-	top: 170px;
+	top: 210px;
 	left: 12px;
 	width: 82px;
 	height: 38px;
@@ -473,7 +473,10 @@ canvas {
 	font-weight: bold;
 	letter-spacing: 2px;
 	cursor: pointer;
-	transition: background 0.1s, border-color 0.1s, color 0.1s;
+	transition:
+		background 0.1s,
+		border-color 0.1s,
+		color 0.1s;
 }
 
 .equip-mod-btn:not(:disabled):active {
@@ -511,7 +514,9 @@ canvas {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	box-shadow: 0 8px 64px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	box-shadow:
+		0 8px 64px rgba(0, 0, 0, 0.95),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
 	animation: equip-panel-in 0.14s ease;
 	width: 420px;
 }
@@ -556,7 +561,9 @@ canvas {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: background 0.12s, color 0.12s;
+	transition:
+		background 0.12s,
+		color 0.12s;
 }
 
 #mod-close-btn:active {
@@ -645,7 +652,9 @@ canvas {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: background 0.1s, color 0.1s;
+	transition:
+		background 0.1s,
+		color 0.1s;
 }
 
 .mod-slot-remove:active {
@@ -671,7 +680,9 @@ canvas {
 	display: flex;
 	flex-direction: column;
 	gap: 3px;
-	transition: background 0.1s, border-color 0.1s;
+	transition:
+		background 0.1s,
+		border-color 0.1s;
 }
 
 .mod-avail-card:active {

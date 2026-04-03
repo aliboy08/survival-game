@@ -6,7 +6,8 @@ import { Equipment } from './Equipment.js';
 import { Rifle } from '../weapon/guns/Rifle.js';
 import { HomingGun } from '../weapon/guns/HomingGun.js';
 import { Sword } from '../weapon/melee/Sword.js';
-import { SkillSlots } from '../skills/SkillSlots.js';
+import { SkillSlots }      from '../skills/SkillSlots.js';
+import { PlayerModSlots }  from '../skills/PlayerModSlots.js';
 
 const SPRITE_SCALE = 2; // 48x48 → 96x96
 const SPRITE_SIZE = 48;
@@ -39,6 +40,9 @@ export class Player extends GameObject {
 	invisible = false;
 	speedMultiplier   = 1.0;
 	skillStrengthMult = 1.0;
+	skillCostMult     = 1.0;
+	skillCooldownMult = 1.0;
+	skillDurationMult = 1.0;
 
 	maxShield       = 50;
 	shield          = 50;
@@ -58,6 +62,7 @@ export class Player extends GameObject {
 		this.equipment.primary = new Rifle();
 		this.equipment.secondary = new HomingGun();
 		this.equipment.melee = new Sword();
+		this.playerModSlots = new PlayerModSlots(this);
 	}
 
 	async init() {

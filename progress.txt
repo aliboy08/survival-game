@@ -90,8 +90,15 @@ skill properties:
 
 ===
 
-"Invisibility" skill
+* Invisibility skill
 
-- armor system (reduce damage)
-- shield system
-- player & skill mods
+* armor system (reduce damage)
+* shield system
+
+* strength multiplier for skills
+
+* player & skill mods system:
+
+* Teleport skill
+- on activate, enter target mode, activate again to confirm destination.
+- on activate button tap twice(within 200ms), teleport randomly around radius.

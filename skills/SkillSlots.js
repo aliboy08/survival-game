@@ -3,16 +3,18 @@ export const MAX_SKILL_SLOTS = 4;
 export class SkillSlots {
 	#slots;
 	#cooldowns;
+	#cooldownDurations;
 	#activeTimers;
 	#channeling;
 
 	noCooldown = false;
 
 	constructor() {
-		this.#slots        = new Array(MAX_SKILL_SLOTS).fill(null);
-		this.#cooldowns    = new Array(MAX_SKILL_SLOTS).fill(0);
-		this.#activeTimers = new Array(MAX_SKILL_SLOTS).fill(0);
-		this.#channeling   = new Array(MAX_SKILL_SLOTS).fill(false);
+		this.#slots             = new Array(MAX_SKILL_SLOTS).fill(null);
+		this.#cooldowns         = new Array(MAX_SKILL_SLOTS).fill(0);
+		this.#cooldownDurations = new Array(MAX_SKILL_SLOTS).fill(0);
+		this.#activeTimers      = new Array(MAX_SKILL_SLOTS).fill(0);
+		this.#channeling        = new Array(MAX_SKILL_SLOTS).fill(false);
 	}
 
 	equip(skill, index) {
@@ -41,12 +43,13 @@ export class SkillSlots {
 		// Toggle channeling off
 		if (skill.channeling && this.#channeling[index]) {
 			this.#stopActive(index, player, game);
-			if (!this.noCooldown) this.#cooldowns[index] = skill.cooldown;
+			if (!this.noCooldown) this.#setCooldown(index, skill, player);
 			return true;
 		}
 
-		if (player.energy < skill.energyCost) return false;
-		player.energy -= skill.energyCost;
+		const cost = Math.max(0, skill.energyCost * (player.skillCostMult ?? 1));
+		if (player.energy < cost) return false;
+		player.energy -= cost;
 
 		skill.activate(player, game);
 
@@ -54,10 +57,10 @@ export class SkillSlots {
 			this.#channeling[index]   = true;
 			this.#activeTimers[index] = -1; // indefinite until toggled or energy runs out
 		} else if (skill.duration > 0) {
-			this.#activeTimers[index] = skill.duration;
+			this.#activeTimers[index] = skill.duration * (player.skillDurationMult ?? 1);
 		} else {
 			// instant — cooldown starts immediately
-			if (!this.noCooldown) this.#cooldowns[index] = skill.cooldown;
+			if (!this.noCooldown) this.#setCooldown(index, skill, player);
 		}
 
 		return true;
@@ -75,10 +78,10 @@ export class SkillSlots {
 
 			// Channeling: drain energy each frame
 			if (this.#channeling[i]) {
-				const drain = skill.drainRate * dt;
+				const drain = skill.drainRate * (player.skillCostMult ?? 1) * dt;
 				if (player.energy < drain) {
 					this.#stopActive(i, player, game);
-					if (!this.noCooldown) this.#cooldowns[i] = skill.cooldown;
+					if (!this.noCooldown) this.#setCooldown(i, skill, player);
 				} else {
 					player.energy -= drain;
 					skill.update(dt, player, game);
@@ -89,13 +92,19 @@ export class SkillSlots {
 				skill.update(dt, player, game);
 				if (this.#activeTimers[i] <= 0) {
 					this.#stopActive(i, player, game);
-					if (!this.noCooldown) this.#cooldowns[i] = skill.cooldown;
+					if (!this.noCooldown) this.#setCooldown(i, skill, player);
 				}
 			}
 		}
 
 		// Energy regen
 		player.energy = Math.min(player.maxEnergy, player.energy + player.energyRegen * dt);
+	}
+
+	#setCooldown(index, skill, player) {
+		const cd = Math.max(0.5, skill.cooldown * (player.skillCooldownMult ?? 1));
+		this.#cooldowns[index]         = cd;
+		this.#cooldownDurations[index] = cd;
 	}
 
 	#stopActive(index, player, game) {
@@ -110,9 +119,9 @@ export class SkillSlots {
 	isActive(i)             { return this.#activeTimers[i] > 0 || this.#channeling[i]; }
 	isChanneling(i)         { return this.#channeling[i]; }
 	activeTimeOf(i)         { return this.#activeTimers[i]; }
-	cooldownFraction(i)     {
-		const skill = this.#slots[i];
-		if (!skill || skill.cooldown === 0) return 0;
-		return Math.min(1, this.#cooldowns[i] / skill.cooldown);
+	cooldownFraction(i) {
+		const dur = this.#cooldownDurations[i];
+		if (!dur) return 0;
+		return Math.min(1, this.#cooldowns[i] / dur);
 	}
 }

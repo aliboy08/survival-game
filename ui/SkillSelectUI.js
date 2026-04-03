@@ -7,6 +7,7 @@ import { Overclock }  from '../skills/buff/Overclock.js';
 import { Bloodlust }  from '../skills/buff/Bloodlust.js';
 import { Adrenaline }   from '../skills/buff/Adrenaline.js';
 import { Invisibility } from '../skills/buff/Invisibility.js';
+import { Teleport }     from '../skills/buff/Teleport.js';
 import { FrostDome }    from '../skills/cc/FrostDome.js';
 
 const SKILL_POOL = [
@@ -19,6 +20,7 @@ const SKILL_POOL = [
 	{ factory: () => new Bloodlust(),  color: '#e74c3c', label: 'BUFF' },
 	{ factory: () => new Adrenaline(),   color: '#2ecc71', label: 'BUFF' },
 	{ factory: () => new Invisibility(), color: '#8e44ad', label: 'BUFF' },
+	{ factory: () => new Teleport(),     color: '#c39bd3', label: 'BUFF' },
 	{ factory: () => new FrostDome(),    color: '#00c8ff', label: 'CC' },
 ];
 
