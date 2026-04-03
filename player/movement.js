@@ -1,4 +1,4 @@
-const SPEED = 150; // pixels per second
+const BASE_SPEED = 150; // pixels per second
 const ARRIVE_THRESHOLD = 4; // pixels — close enough to target
 
 const ANGLE_TO_DIRECTION = [
@@ -29,11 +29,13 @@ export class Movement {
 		const { x, y } = input.movement;
 		const hasDirectInput = x !== 0 || y !== 0;
 
+		const speed = BASE_SPEED * (player.speedMultiplier ?? 1.0);
+
 		if (hasDirectInput) {
 			this.#moveTarget = null;
 			const len = Math.hypot(x, y);
-			player.x += (x / len) * SPEED * dt;
-			player.y += (y / len) * SPEED * dt;
+			player.x += (x / len) * speed * dt;
+			player.y += (y / len) * speed * dt;
 			return vectorToDirection(x, y);
 		}
 
@@ -45,8 +47,8 @@ export class Movement {
 			if (dist <= ARRIVE_THRESHOLD) {
 				this.#moveTarget = null;
 			} else {
-				player.x += (dx / dist) * SPEED * dt;
-				player.y += (dy / dist) * SPEED * dt;
+				player.x += (dx / dist) * speed * dt;
+				player.y += (dy / dist) * speed * dt;
 				return vectorToDirection(dx, dy);
 			}
 		}

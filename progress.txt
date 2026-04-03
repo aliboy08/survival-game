@@ -55,9 +55,56 @@ sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2a
 ===
 
 - weapon select ui
-- added "Greatsword" and "Sniper"
+- added "Greatsword" and "Sniper" weapons
 
 - mods system
     - assigned to weapons (6 slots)
 
 mods: damage, fire rate, reload, fire, electric, cold, toxic
+
+skills system
+
+skils categories:
+- damage
+- buff
+
+placeholder skills:
+#: 1
+Name: Nova
+Category: Damage
+Description: Burst of energy damages all nearby enemies
+────────────────────────────────────────
+#: 2
+Name: Shockwave
+Category: Damage
+Description: Damages enemies in a forward cone
+────────────────────────────────────────
+#: 3
+Name: Blaze
+Category: Damage
+Description: Channels fire around player, drains energy
+────────────────────────────────────────
+#: 4
+Name: Frenzy
+Category: Buff
+Description: Doubles fire rate
+────────────────────────────────────────
+#: 5
+Name: Shield
+Category: Buff
+Description: Damage immunity
+────────────────────────────────────────
+#: 6
+Name: Overclock
+Category: Buff
+Description: Instant full reload + no reload for duration 
+────────────────────────────────────────
+#: 7
+Name: Bloodlust
+Category: Buff
+Description: Heals player on each kill
+────────────────────────────────────────
+#: 8
+Name: Adrenaline
+Category: Buff
+Description: Greatly increases movement speed

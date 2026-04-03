@@ -1,17 +1,4 @@
-import { Rifle }      from '../weapon/guns/Rifle.js';
-import { Sniper }     from '../weapon/guns/Sniper.js';
-import { Pistol }     from '../weapon/guns/Pistol.js';
-import { Revolver }   from '../weapon/guns/Revolver.js';
-import { HomingGun }  from '../weapon/guns/HomingGun.js';
-import { Sword }      from '../weapon/melee/Sword.js';
-import { Greatsword } from '../weapon/melee/Greatsword.js';
 import { ModSelectUI } from './ModSelectUI.js';
-
-const WEAPON_REGISTRY = {
-	primary:   [Rifle, Sniper],
-	secondary: [Pistol, Revolver, HomingGun],
-	melee:     [Sword, Greatsword],
-};
 
 function getStats(weapon) {
 	if (weapon.magazine !== undefined) {
@@ -24,11 +11,12 @@ export class EquipmentSelectUI {
 	#player;
 	#overlay;
 	#slotLists = {};
-	#modBtns   = {};
-	#modUI     = new ModSelectUI();
+	#modBtns = {};
+	#modUI = new ModSelectUI();
 
-	constructor(player) {
+	constructor(player, weapons_manager) {
 		this.#player = player;
+		this.weapons_manager = weapons_manager;
 		this.#build();
 	}
 
@@ -74,7 +62,9 @@ export class EquipmentSelectUI {
 		const cols = document.createElement('div');
 		cols.id = 'equip-columns';
 
-		for (const [slot, weaponClasses] of Object.entries(WEAPON_REGISTRY)) {
+		for (const [slot, weaponClasses] of Object.entries(
+			this.weapons_manager.weapons,
+		)) {
 			const col = document.createElement('div');
 			col.className = 'equip-col';
 			col.dataset.slot = slot;
@@ -125,17 +115,17 @@ export class EquipmentSelectUI {
 
 	#buildCard(WeaponClass, slot) {
 		const temp = new WeaponClass();
-		const btn  = document.createElement('button');
-		btn.className      = 'equip-weapon-btn';
-		btn.dataset.slot   = slot;
+		const btn = document.createElement('button');
+		btn.className = 'equip-weapon-btn';
+		btn.dataset.slot = slot;
 		btn.dataset.weapon = temp.name;
 
 		const name = document.createElement('div');
-		name.className   = 'card-name';
+		name.className = 'card-name';
 		name.textContent = temp.name.toUpperCase();
 
 		const stats = document.createElement('div');
-		stats.className   = 'card-stats';
+		stats.className = 'card-stats';
 		stats.textContent = getStats(temp);
 
 		btn.appendChild(name);
@@ -160,7 +150,10 @@ export class EquipmentSelectUI {
 		for (const [slot, list] of Object.entries(this.#slotLists)) {
 			const current = this.#player.equipment[slot];
 			for (const btn of list.querySelectorAll('.equip-weapon-btn')) {
-				btn.classList.toggle('active', !!current && btn.dataset.weapon === current.name);
+				btn.classList.toggle(
+					'active',
+					!!current && btn.dataset.weapon === current.name,
+				);
 			}
 		}
 	}

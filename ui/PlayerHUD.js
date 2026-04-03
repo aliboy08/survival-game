@@ -1,9 +1,10 @@
 import { GameObject } from '../core/GameObject.js';
 
-const BAR_WIDTH  = 160;
-const BAR_HEIGHT = 12;
-const XP_BAR_H   = 6;
-const PADDING    = 16;
+const BAR_WIDTH   = 160;
+const BAR_HEIGHT  = 12;
+const ENERGY_BAR_H = 8;
+const XP_BAR_H    = 6;
+const PADDING     = 16;
 
 const SLOT_COLORS = {
 	primary:   '#f39c12',
@@ -38,7 +39,7 @@ export class PlayerHUD extends GameObject {
 		ctx.save();
 		ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
 		ctx.beginPath();
-		ctx.roundRect(x - 10, 6, BAR_WIDTH + 26, 148, 10);
+		ctx.roundRect(x - 10, 6, BAR_WIDTH + 26, 168, 10);
 		ctx.fill();
 		ctx.restore();
 
@@ -73,9 +74,35 @@ export class PlayerHUD extends GameObject {
 		ctx.fillStyle = 'rgba(255,255,255,0.3)';
 		ctx.fillText(`LV ${p.level}`, x + BAR_WIDTH, hpY - 1);
 
+		// ── Energy bar ───────────────────────────────────────────
+		const energyRatio = Math.max(0, p.energy / p.maxEnergy);
+		const energyY     = hpLabelY + 10;
+
+		ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+		ctx.beginPath();
+		ctx.roundRect(x, energyY, BAR_WIDTH, ENERGY_BAR_H, ENERGY_BAR_H / 2);
+		ctx.fill();
+
+		const energyFill = Math.max(ENERGY_BAR_H, Math.round(BAR_WIDTH * energyRatio));
+		ctx.fillStyle = '#00c8ff';
+		ctx.beginPath();
+		ctx.roundRect(x, energyY, energyFill, ENERGY_BAR_H, ENERGY_BAR_H / 2);
+		ctx.fill();
+
+		const energyLabelY = energyY + ENERGY_BAR_H + 11;
+		ctx.font      = '9px monospace';
+		ctx.fillStyle = 'rgba(255,255,255,0.35)';
+		ctx.textAlign = 'left';
+		ctx.fillText('NRG', x, energyLabelY);
+
+		ctx.font      = 'bold 10px monospace';
+		ctx.fillStyle = '#00c8ff';
+		ctx.textAlign = 'right';
+		ctx.fillText(`${Math.floor(p.energy)} / ${p.maxEnergy}`, x + BAR_WIDTH, energyLabelY);
+
 		// ── XP bar ───────────────────────────────────────────────
 		const xpRatio = Math.max(0, p.xp / p.xpToNext);
-		const xpY     = hpLabelY + 10;
+		const xpY     = energyLabelY + 10;
 
 		ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
 		ctx.beginPath();

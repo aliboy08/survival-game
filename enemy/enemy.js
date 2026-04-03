@@ -30,6 +30,7 @@ export class Enemy extends GameObject {
     this.#hitFlash = 0.12;
     if (this.isDead) {
       this.#player.gainXp(this.xpReward);
+      this.#player.emit('kill', this);
       this.dead = true;
     }
   }
