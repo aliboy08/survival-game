@@ -1,8 +1,13 @@
 import { GameObject } from '../core/GameObject.js';
 import { Enemy } from './enemy.js';
+import { MeleeEnemy } from './MeleeEnemy.js';
+import { RangedEnemy } from './RangedEnemy.js';
 
 const SPAWN_INTERVAL = 2; // seconds between spawns
 const MAX_ENEMIES = 10;
+
+// Probability of spawning a ranged enemy (0.0 – 1.0)
+const RANGED_CHANCE = 0.6;
 
 export class EnemySpawner extends GameObject {
 	#game;
@@ -52,6 +57,10 @@ export class EnemySpawner extends GameObject {
 				break; // right
 		}
 
-		this.#game.add(new Enemy(x, y, this.#player));
+		const enemy = Math.random() < RANGED_CHANCE
+			? new RangedEnemy(x, y, this.#player, this.#game)
+			: new MeleeEnemy(x, y, this.#player);
+
+		this.#game.add(enemy);
 	}
 }

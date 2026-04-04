@@ -1,54 +1,30 @@
-import { GameObject } from '../core/GameObject.js';
-import { HealthBar }  from '../ui/HealthBar.js';
+import { Enemy, _steerToward } from './enemy.js';
+import { HealthBar } from '../ui/HealthBar.js';
 
-const WIDTH          = 48;
-const HEIGHT         = 48;
-const SPEED          = 80;
-const WANDER_SPEED   = 30;
-const CONTACT_DAMAGE = 10;
+const SPEED          = 120;
+const WANDER_SPEED   = 32;
+const CONTACT_DAMAGE = 15;
+const WIDTH          = 44;
+const HEIGHT         = 44;
 const AGGRO_RANGE    = 300;
 const DEAGGRO_RANGE  = 450;
-const TURN_RATE      = 3.5; // rad/s
+const TURN_RATE      = 4.5; // rad/s — turns sharply when charging
 
-export class Enemy extends GameObject {
-  #healthBar   = new HealthBar();
+export class MeleeEnemy extends Enemy {
   #player;
-  #hitFlash    = 0;
-  #aggroed     = false;
-  #aggroFlash  = 0;       // brief "!" indicator duration
+  #hitFlash     = 0;
+  #healthBar    = new HealthBar();
+  #aggroed      = false;
+  #aggroFlash   = 0;
   #headingAngle = Math.random() * Math.PI * 2;
   #wanderTarget = null;
   #wanderTimer  = 0;
 
-  speedMultiplier = 1.0;
-  frozen          = false;
-
-  constructor(x, y, player, { hp = 100, xpReward = 25 } = {}) {
-    super();
-    this.x         = x;
-    this.y         = y;
-    this.width     = WIDTH;
-    this.height    = HEIGHT;
-    this.maxHp     = hp;
-    this.hp        = hp;
-    this.xpReward  = xpReward;
-    this.#player   = player;
-  }
-
-  get isDead() { return this.hp <= 0; }
-
-  takeDamage(amount) {
-    this.hp = Math.max(0, this.hp - amount);
-    this.#hitFlash = 0.12;
-    if (!this.#aggroed) {
-      this.#aggroed    = true;
-      this.#aggroFlash = 0.6;
-    }
-    if (this.isDead) {
-      this.#player.gainXp(this.xpReward);
-      this.#player.emit('kill', this);
-      this.dead = true;
-    }
+  constructor(x, y, player, opts = {}) {
+    super(x, y, player, { hp: 150, xpReward: 30, ...opts });
+    this.#player = player;
+    this.width   = WIDTH;
+    this.height  = HEIGHT;
   }
 
   update(dt) {
@@ -58,7 +34,6 @@ export class Enemy extends GameObject {
     this.#updateAggro();
     this.#move(dt);
     this.#checkPlayerCollision();
-    super.update(dt);
   }
 
   #updateAggro() {
@@ -129,11 +104,11 @@ export class Enemy extends GameObject {
 
   #checkPlayerCollision() {
     if (this.#player.invisible) return;
-    const p        = this.#player;
-    const halfW    = (this.width  + p.width)  / 2;
-    const halfH    = (this.height + p.height) / 2;
-    const dx       = this.x - p.x;
-    const dy       = this.y - p.y;
+    const p     = this.#player;
+    const halfW = (this.width  + p.width)  / 2;
+    const halfH = (this.height + p.height) / 2;
+    const dx    = this.x - p.x;
+    const dy    = this.y - p.y;
 
     if (Math.abs(dx) >= halfW || Math.abs(dy) >= halfH) return;
 
@@ -145,13 +120,38 @@ export class Enemy extends GameObject {
     p.takeDamage(CONTACT_DAMAGE);
   }
 
+  takeDamage(amount) {
+    this.#hitFlash = 0.12;
+    if (!this.#aggroed) {
+      this.#aggroed    = true;
+      this.#aggroFlash = 0.6;
+    }
+    super.takeDamage(amount);
+  }
+
   draw(ctx) {
     const left = Math.round(this.x - this.width  / 2);
     const top  = Math.round(this.y - this.height / 2);
 
-    ctx.fillStyle = '#c0392b';
+    // Body — orange-red
+    ctx.fillStyle = '#e67e22';
     ctx.fillRect(left, top, this.width, this.height);
 
+    // Claw marks
+    ctx.save();
+    ctx.strokeStyle = '#d35400';
+    ctx.lineWidth   = 2;
+    ctx.beginPath();
+    ctx.moveTo(left + 10, top + 8);
+    ctx.lineTo(left + 18, top + this.height - 8);
+    ctx.moveTo(left + 18, top + 8);
+    ctx.lineTo(left + 26, top + this.height - 8);
+    ctx.moveTo(left + 26, top + 8);
+    ctx.lineTo(left + 34, top + this.height - 8);
+    ctx.stroke();
+    ctx.restore();
+
+    // Freeze/slow overlay
     if (this.frozen) {
       ctx.save();
       ctx.globalAlpha = 0.55;
@@ -166,6 +166,7 @@ export class Enemy extends GameObject {
       ctx.restore();
     }
 
+    // Hit flash
     if (this.#hitFlash > 0) {
       ctx.save();
       ctx.globalAlpha = (this.#hitFlash / 0.12) * 0.6;
@@ -174,7 +175,7 @@ export class Enemy extends GameObject {
       ctx.restore();
     }
 
-    ctx.strokeStyle = '#7b241c';
+    ctx.strokeStyle = '#a04000';
     ctx.lineWidth   = 2;
     ctx.strokeRect(left, top, this.width, this.height);
 
@@ -191,14 +192,5 @@ export class Enemy extends GameObject {
     }
 
     this.#healthBar.draw(ctx, this);
-    super.draw(ctx);
   }
-}
-
-// Module-level helper — avoids duplicating in every subclass
-export function _steerToward(current, target, rate, dt) {
-  let diff = target - current;
-  while (diff >  Math.PI) diff -= Math.PI * 2;
-  while (diff < -Math.PI) diff += Math.PI * 2;
-  return current + Math.sign(diff) * Math.min(Math.abs(diff), rate * dt);
 }

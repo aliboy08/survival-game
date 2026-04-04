@@ -62,6 +62,10 @@ sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2a
 
 mods: damage, fire rate, reload, fire, electric, cold, toxic
 
+===
+
+2026/04/03
+
 * energy / mana system
 
 * skills system
@@ -88,8 +92,6 @@ skill properties:
 "Adrenalie" (warframe volt speed skill)
 - increse move speed and fire rate
 
-===
-
 * Invisibility skill
 
 * armor system (reduce damage)
@@ -102,3 +104,11 @@ skill properties:
 * Teleport skill
 - on activate, enter target mode, activate again to confirm destination.
 - on activate button tap twice(within 200ms), teleport randomly around radius.
+
+===
+
+2026/04/04
+
+- improve enemy ai + aggro range
+- melee enemy
+- range enemy
