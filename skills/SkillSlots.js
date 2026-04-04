@@ -114,6 +114,13 @@ export class SkillSlots {
 		this.#channeling[index]   = false;
 	}
 
+	get isTargeting() {
+		for (let i = 0; i < MAX_SKILL_SLOTS; i++) {
+			if (this.#channeling[i] && this.#slots[i]?.targeting) return true;
+		}
+		return false;
+	}
+
 	get slots()             { return [...this.#slots]; }
 	cooldownOf(i)           { return this.#cooldowns[i] ?? 0; }
 	isActive(i)             { return this.#activeTimers[i] > 0 || this.#channeling[i]; }

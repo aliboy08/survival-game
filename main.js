@@ -23,7 +23,7 @@ import { PauseMenu } from './ui/PauseMenu.js';
 
 const game = new Game('gameCanvas');
 const input = new Input(game.canvas);
-const gameOver = new GameOverScreen();
+const gameOver = new GameOverScreen(game);
 
 const player = new Player(game.canvas.width / 2, game.canvas.height / 2, input);
 const selector = new WeaponSelector();
@@ -32,32 +32,31 @@ const joystick = new VirtualJoystick(game.canvas, input);
 
 player.on('dead', () => {
 	pauseMenu.disable();
-	game.stop();
 	gameOver.show();
 });
 
 await game.add(player);
 await game.add(shootSystem);
 await game.add(joystick);
-await game.add(new EnemySpawner(game, player, false));
+await game.add(new EnemySpawner(game, player, true));
 await game.add(new PlayerHUD(player));
 const targetIndicator = new TargetIndicator(game, player);
 await game.add(targetIndicator);
 shootSystem.targetIndicator = targetIndicator;
 
 const weapons_manager = new Weapons_Manager();
-const skillSystem     = new SkillSystem(game, player);
+const skillSystem = new SkillSystem(game, player);
 await game.add(skillSystem);
 
 const skillSelectUI = new SkillSelectUI();
 new SkillHUD(player, skillSystem, skillSelectUI);
 
 new ReloadButton(shootSystem);
-new WeaponSwitchButton(player, shootSystem);  // also builds weapon indicator + ammo display
-new AutoShootButton(shootSystem);             // appended first → left of primary row
-new AttackButton(input, shootSystem);         // appended second → right of primary row
+new WeaponSwitchButton(player, shootSystem); // also builds weapon indicator + ammo display
+new AutoShootButton(shootSystem); // appended first → left of primary row
+new AttackButton(input, shootSystem); // appended second → right of primary row
 const equipUI = new EquipmentSelectUI(player, weapons_manager);
-const modUI   = new PlayerModSelectUI(player);
+const modUI = new PlayerModSelectUI(player);
 const pauseMenu = new PauseMenu(game, player, equipUI, modUI, skillSelectUI);
 
 new DebugPanel(game, player);

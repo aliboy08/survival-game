@@ -1,7 +1,9 @@
 export class GameOverScreen {
   #el;
+  #game;
 
-  constructor() {
+  constructor(game) {
+    this.#game = game;
     this.#el = document.createElement('div');
     this.#el.id = 'game-over-screen';
     this.#el.innerHTML = `
@@ -14,6 +16,7 @@ export class GameOverScreen {
   }
 
   show() {
+    this.#game.stop();
     this.#el.classList.add('visible');
   }
 }

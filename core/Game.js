@@ -2,7 +2,8 @@ export class Game {
 	#canvas;
 	#ctx;
 	#lastTime = 0;
-	#rafId = null;
+	#rafId    = null;
+	#stopped  = true;
 
 	constructor(canvasId) {
 		this.#canvas = document.getElementById(canvasId);
@@ -36,10 +37,12 @@ export class Game {
 	}
 
 	start() {
-		this.#rafId = requestAnimationFrame((t) => this.#loop(t));
+		this.#stopped = false;
+		this.#rafId   = requestAnimationFrame((t) => this.#loop(t));
 	}
 
 	stop() {
+		this.#stopped = true;
 		if (this.#rafId !== null) {
 			cancelAnimationFrame(this.#rafId);
 			this.#rafId = null;
@@ -69,6 +72,8 @@ export class Game {
 			if (entity.dead) this.remove(entity);
 		}
 
-		this.#rafId = requestAnimationFrame((t) => this.#loop(t));
+		if (!this.#stopped) {
+			this.#rafId = requestAnimationFrame((t) => this.#loop(t));
+		}
 	}
 }

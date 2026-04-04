@@ -113,6 +113,7 @@ export class Teleport extends Skill {
 			channeling:  true,
 			drainRate:   0,
 			range:       350,
+			targeting:   true,
 		});
 	}
 
@@ -137,18 +138,21 @@ export class Teleport extends Skill {
 			this.#reticle?.setTarget(this.#pointerX, this.#pointerY);
 		};
 
-		// Canvas tap confirms target position
+		// Canvas tap confirms target position.
+		// Registered in capture phase so stopImmediatePropagation() prevents
+		// Input's bubble-phase listener from treating the click as a weapon shot.
 		this.#onCanvasDown = (e) => {
 			const rect     = this.#canvas.getBoundingClientRect();
 			this.#pointerX = (e.clientX - rect.left) * (this.#canvas.width  / rect.width);
 			this.#pointerY = (e.clientY - rect.top)  * (this.#canvas.height / rect.height);
 			this.#confirmedByCanvas = true;
+			e.stopImmediatePropagation();
 			const index = player.skillSlots.slots.indexOf(this);
 			if (index !== -1) player.skillSlots.activate(index, player, game);
 		};
 
 		window.addEventListener('pointermove', this.#onPointerMove);
-		this.#canvas.addEventListener('pointerdown', this.#onCanvasDown);
+		this.#canvas.addEventListener('pointerdown', this.#onCanvasDown, { capture: true });
 	}
 
 	deactivate(player, game) {
@@ -179,7 +183,7 @@ export class Teleport extends Skill {
 			this.#onPointerMove = null;
 		}
 		if (this.#onCanvasDown) {
-			this.#canvas?.removeEventListener('pointerdown', this.#onCanvasDown);
+			this.#canvas?.removeEventListener('pointerdown', this.#onCanvasDown, { capture: true });
 			this.#onCanvasDown = null;
 		}
 		if (this.#reticle) {

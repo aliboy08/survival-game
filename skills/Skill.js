@@ -1,5 +1,5 @@
 export class Skill {
-	constructor({ name, description, category, energyCost, cooldown, duration = 0, channeling = false, drainRate = 0, damage = 0, range = 0, strength = 0 }) {
+	constructor({ name, description, category, energyCost, cooldown, duration = 0, channeling = false, drainRate = 0, damage = 0, range = 0, strength = 0, targeting = false }) {
 		this.name        = name;
 		this.description = description;
 		this.category    = category;   // 'damage' | 'buff' | 'cc'
@@ -11,6 +11,7 @@ export class Skill {
 		this.damage      = damage;
 		this.range       = range;      // radius or distance in px (0 = N/A)
 		this.strength    = strength;   // effectiveness — damage, buff magnitude, etc. (0 = N/A)
+		this.targeting   = targeting;  // true = skill consumes pointer input (suppresses shooting)
 	}
 
 	/** Returns strength scaled by the player's skillStrengthMult. */

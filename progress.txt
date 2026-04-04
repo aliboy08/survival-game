@@ -16,7 +16,6 @@ sprite: https://www.pixellab.ai/create-character/f95d4ec1-b679-40ac-afa3-5325f2a
 - level up system
 - laser type projectile
 
-
 - player hp
 - level up system
 - laser projectile type
@@ -113,4 +112,4 @@ skill properties:
 * melee enemy
 * range enemy
 
-* menu screen
+* pause / menu screen (skills, equipment, mods select screen)
