@@ -20,6 +20,7 @@ import { SkillSystem } from './skills/SkillSystem.js';
 import { SkillHUD } from './ui/SkillHUD.js';
 import { SkillSelectUI } from './ui/SkillSelectUI.js';
 import { PauseMenu } from './ui/PauseMenu.js';
+import { ControlsScreen } from './ui/ControlsScreen.js';
 
 const game = new Game('gameCanvas');
 const input = new Input(game.canvas);
@@ -57,7 +58,8 @@ new AutoShootButton(shootSystem); // appended first → left of primary row
 new AttackButton(input, shootSystem); // appended second → right of primary row
 const equipUI = new EquipmentSelectUI(player, weapons_manager);
 const modUI = new PlayerModSelectUI(player);
-const pauseMenu = new PauseMenu(game, player, equipUI, modUI, skillSelectUI);
+const controlsScreen = new ControlsScreen();
+const pauseMenu = new PauseMenu(game, player, equipUI, modUI, skillSelectUI, controlsScreen);
 
 new DebugPanel(game, player);
 

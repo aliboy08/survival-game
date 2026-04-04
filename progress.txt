@@ -108,9 +108,9 @@ skill properties:
 
 2026/04/04
 
-* improve enemy ai + aggro range
+* improve enemy ai + aggro
 * melee enemy
 * range enemy
-
 * pause/menu screen (skills, equipment, mods select screen)
+
 * controls mapping option

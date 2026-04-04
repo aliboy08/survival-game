@@ -230,8 +230,8 @@ add skill select on the menu screen.
 enemy ai should not wander off outside the screen
 
 add controls mapping in menu screen, controls for:
-- movement controls
-- shoot
-- skill activate
-- reload
-- switch weapon
+- movement controls: default = w, s, a, d
+- shoot: default = "space"
+- skill activate: default 1, 2, 3, 4
+- reload: default "r"
+- switch weapon: default = "tab"

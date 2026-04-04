@@ -27,8 +27,8 @@ export class ControlsScreen {
 			['Skill 2',        '2'],
 			['Skill 3',        '3'],
 			['Skill 4',        '4'],
-			['Reload',         'RELOAD button'],
-			['Switch Weapon',  'SWITCH button'],
+			['Reload',         'R'],
+			['Switch Weapon',  'Tab'],
 			['Pause / Menu',   'ESC'],
 		];
 

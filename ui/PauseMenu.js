@@ -53,6 +53,9 @@ export class PauseMenu {
 		this.#makeBtn(panel, 'MODS',      '',       () => this.#openSub(() =>
 			this.#modUI.open()
 		));
+		this.#makeBtn(panel, 'CONTROLS', '',       () => this.#openSub(() =>
+			this.#controlsScreen?.open()
+		));
 
 		this.#overlay.appendChild(panel);
 		document.body.appendChild(this.#overlay);
@@ -92,6 +95,7 @@ export class PauseMenu {
 				{ id: 'equip-overlay',          returnTo: 'pause' },
 				{ id: 'player-mod-overlay',     returnTo: 'pause' },
 				{ id: 'skill-select-overlay',   returnTo: 'pause' },
+				{ id: 'controls-overlay',       returnTo: 'pause' },
 			];
 
 			for (const { id, returnTo } of layers) {
