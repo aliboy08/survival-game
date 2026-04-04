@@ -10,13 +10,8 @@ function injectStyles() {
 	style.id = 'skill-hud-styles';
 	style.textContent = `
 		#skill-hud {
-			position: fixed;
-			bottom: 24px;
-			left: 50%;
-			transform: translateX(-50%);
 			display: flex;
 			gap: 10px;
-			z-index: 100;
 			pointer-events: none;
 		}
 		.skill-card {
@@ -106,8 +101,8 @@ export class SkillHUD {
 	#container;
 
 	constructor(player, skillSystem, skillSelectUI) {
-		this.#player       = player;
-		this.#skillSystem  = skillSystem;
+		this.#player        = player;
+		this.#skillSystem   = skillSystem;
 		this.#skillSelectUI = skillSelectUI;
 		injectStyles();
 		this.#build();
@@ -154,13 +149,12 @@ export class SkillHUD {
 			this.#cards.push({ card, nameEl, costEl, overlay, cdText });
 		}
 
-		document.body.appendChild(this.#container);
+		document.getElementById('hud-bottom-center').appendChild(this.#container);
 	}
 
 	#onTap(index) {
 		const skill = this.#player.skillSlots.slots[index];
 		if (!skill) {
-			// Empty slot — open select UI
 			this.#skillSelectUI.open(index, this.#player.skillSlots);
 		} else {
 			this.#skillSystem.activate(index);
@@ -196,7 +190,6 @@ export class SkillHUD {
 				continue;
 			}
 
-			// Remove empty label if present
 			const emptyEl = card.querySelector('.skill-card-empty-label');
 			if (emptyEl) emptyEl.remove();
 

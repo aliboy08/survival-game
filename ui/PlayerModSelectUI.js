@@ -29,32 +29,6 @@ function injectStyles() {
 	const style = document.createElement('style');
 	style.id = 'player-mod-styles';
 	style.textContent = `
-		#player-mod-open-btn {
-			position: fixed;
-			top: 260px;
-			left: 12px;
-			width: 82px;
-			height: 38px;
-			border-radius: 20px;
-			background: rgba(12, 12, 28, 0.88);
-			border: 1px solid rgba(255, 255, 255, 0.16);
-			color: rgba(255, 255, 255, 0.7);
-			font-size: 10px;
-			font-weight: bold;
-			font-family: monospace;
-			letter-spacing: 2px;
-			cursor: pointer;
-			z-index: 9999;
-			touch-action: none;
-			user-select: none;
-			box-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
-			transition: border-color 0.15s, color 0.15s, background 0.15s;
-		}
-		#player-mod-open-btn:active {
-			background: rgba(93, 173, 226, 0.14);
-			border-color: rgba(93, 173, 226, 0.55);
-			color: #5dade2;
-		}
 		#player-mod-overlay {
 			display: none;
 			position: fixed;
@@ -142,15 +116,6 @@ export class PlayerModSelectUI {
 	}
 
 	#build() {
-		const openBtn = document.createElement('button');
-		openBtn.id = 'player-mod-open-btn';
-		openBtn.textContent = 'MODS';
-		openBtn.addEventListener('pointerdown', (e) => {
-			e.stopPropagation();
-			this.#open();
-		});
-		document.body.appendChild(openBtn);
-
 		this.#overlay = document.createElement('div');
 		this.#overlay.id = 'player-mod-overlay';
 		this.#overlay.addEventListener('pointerdown', (e) => {
@@ -252,6 +217,8 @@ export class PlayerModSelectUI {
 		this.#overlay.appendChild(panel);
 		document.body.appendChild(this.#overlay);
 	}
+
+	open() { this.#open(); }
 
 	#open() {
 		this.#refreshSlots();

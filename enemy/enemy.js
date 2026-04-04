@@ -118,11 +118,14 @@ export class Enemy extends GameObject {
   }
 
   #pickWanderTarget() {
-    const angle = Math.random() * Math.PI * 2;
-    const dist  = 80 + Math.random() * 140;
+    const margin = 60;
+    const maxX   = window.innerWidth  - margin;
+    const maxY   = window.innerHeight - margin;
+    const angle  = Math.random() * Math.PI * 2;
+    const dist   = 80 + Math.random() * 140;
     this.#wanderTarget = {
-      x: this.x + Math.cos(angle) * dist,
-      y: this.y + Math.sin(angle) * dist,
+      x: Math.max(margin, Math.min(maxX, this.x + Math.cos(angle) * dist)),
+      y: Math.max(margin, Math.min(maxY, this.y + Math.sin(angle) * dist)),
     };
     this.#wanderTimer = 2 + Math.random() * 2;
   }

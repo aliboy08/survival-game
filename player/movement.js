@@ -12,7 +12,7 @@ const ANGLE_TO_DIRECTION = [
 	'north-east',
 ];
 
-function vectorToDirection(x, y) {
+export function vectorToDirection(x, y) {
 	const angle = Math.atan2(y, x);
 	const index = Math.round(angle / (Math.PI / 4) + 8) % 8;
 	return ANGLE_TO_DIRECTION[index];

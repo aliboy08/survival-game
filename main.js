@@ -19,6 +19,7 @@ import { Weapons_Manager } from './weapon/weapons_manager.js';
 import { SkillSystem } from './skills/SkillSystem.js';
 import { SkillHUD } from './ui/SkillHUD.js';
 import { SkillSelectUI } from './ui/SkillSelectUI.js';
+import { PauseMenu } from './ui/PauseMenu.js';
 
 const game = new Game('gameCanvas');
 const input = new Input(game.canvas);
@@ -30,6 +31,7 @@ const shootSystem = new ShootSystem(game, player, input, selector);
 const joystick = new VirtualJoystick(game.canvas, input);
 
 player.on('dead', () => {
+	pauseMenu.disable();
 	game.stop();
 	gameOver.show();
 });
@@ -50,12 +52,14 @@ await game.add(skillSystem);
 const skillSelectUI = new SkillSelectUI();
 new SkillHUD(player, skillSystem, skillSelectUI);
 
-new AttackButton(input, shootSystem);
 new ReloadButton(shootSystem);
-new WeaponSwitchButton(player, shootSystem);
-new AutoShootButton(shootSystem);
-new EquipmentSelectUI(player, weapons_manager);
-new PlayerModSelectUI(player);
+new WeaponSwitchButton(player, shootSystem);  // also builds weapon indicator + ammo display
+new AutoShootButton(shootSystem);             // appended first → left of primary row
+new AttackButton(input, shootSystem);         // appended second → right of primary row
+const equipUI = new EquipmentSelectUI(player, weapons_manager);
+const modUI   = new PlayerModSelectUI(player);
+const pauseMenu = new PauseMenu(game, player, equipUI, modUI, skillSelectUI);
+
 new DebugPanel(game, player);
 
 game.start();

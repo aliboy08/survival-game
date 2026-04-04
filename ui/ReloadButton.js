@@ -9,6 +9,6 @@ export class ReloadButton {
 			e.stopPropagation();
 			shootSystem.reload();
 		});
-		document.body.appendChild(this.#btn);
+		document.getElementById('hud-br-row-secondary').appendChild(this.#btn);
 	}
 }

@@ -1,7 +1,8 @@
-import { GameObject } from '../core/GameObject.js';
-import { Laser }      from '../projectile/Laser.js';
-import { Melee }      from '../weapon/melee/Melee.js';
-import { Enemy }      from '../enemy/enemy.js';
+import { GameObject }        from '../core/GameObject.js';
+import { Laser }             from '../projectile/Laser.js';
+import { Melee }             from '../weapon/melee/Melee.js';
+import { Enemy }             from '../enemy/enemy.js';
+import { vectorToDirection } from './movement.js';
 
 const DIRECTION_VECTORS = {
   'north':      { x:  0, y: -1 },
@@ -56,6 +57,16 @@ export class ShootSystem extends GameObject {
     const activeWeapon   = this.#player.activeWeapon;
     const hasEnemy       = this.#game.getEntities(Enemy).length > 0;
     const shouldShoot    = this.#input.shootHeld || (this.#autoShoot && hasEnemy);
+
+    // Face toward the pointer whenever the player is actively aiming
+    const aimTarget = this.#input.canvasShootTarget;
+    if (aimTarget) {
+      const dx = aimTarget.x - this.#player.x;
+      const dy = aimTarget.y - this.#player.y;
+      if (Math.hypot(dx, dy) > 1) {
+        this.#player.facing = vectorToDirection(dx, dy);
+      }
+    }
 
     if (selectorWeapon === 'laser') {
       this.#updateLaser(shouldShoot);

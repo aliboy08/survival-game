@@ -15,10 +15,12 @@ export class DebugPanel {
 	}
 
 	#build() {
+		const container = document.getElementById('hud-top-right');
+
 		const toggle = document.createElement('button');
 		toggle.id          = 'debug-toggle';
 		toggle.textContent = 'DEBUG';
-		document.body.appendChild(toggle);
+		container.appendChild(toggle);
 
 		this.#panel = document.createElement('div');
 		this.#panel.id = 'debug-panel';
@@ -30,11 +32,11 @@ export class DebugPanel {
 		});
 
 		this.#addButton('Spawn Enemy', () => this.enemy_spawner.spawn());
-		this.#addToggle('God Mode',        () => this.#player.godMode,                   v => this.#player.godMode                   = v);
-		this.#addToggle('Infinite Ammo',   () => this.#player.infiniteAmmo,              v => this.#player.infiniteAmmo              = v);
-		this.#addToggle('Skill No Cooldown', () => this.#player.skillSlots.noCooldown,   v => this.#player.skillSlots.noCooldown     = v);
+		this.#addToggle('God Mode',          () => this.#player.godMode,               v => this.#player.godMode               = v);
+		this.#addToggle('Infinite Ammo',     () => this.#player.infiniteAmmo,          v => this.#player.infiniteAmmo          = v);
+		this.#addToggle('Skill No Cooldown', () => this.#player.skillSlots.noCooldown, v => this.#player.skillSlots.noCooldown = v);
 
-		document.body.appendChild(this.#panel);
+		container.appendChild(this.#panel);
 	}
 
 	#addButton(label, onClick) {

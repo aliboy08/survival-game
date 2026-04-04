@@ -19,23 +19,15 @@ export class AttackButton {
 			e.stopPropagation();
 			this.#input.setShootHeld(true);
 		});
-		this.#btn.addEventListener('pointerup', () =>
-			this.#input.setShootHeld(false),
-		);
-		this.#btn.addEventListener('pointercancel', () =>
-			this.#input.setShootHeld(false),
-		);
-		this.#btn.addEventListener('pointerleave', () =>
-			this.#input.setShootHeld(false),
-		);
+		this.#btn.addEventListener('pointerup',     () => this.#input.setShootHeld(false));
+		this.#btn.addEventListener('pointercancel', () => this.#input.setShootHeld(false));
+		this.#btn.addEventListener('pointerleave',  () => this.#input.setShootHeld(false));
 
-		document.body.appendChild(this.#btn);
+		document.getElementById('hud-br-row-primary').appendChild(this.#btn);
 	}
 
 	#tick() {
-		const reloading = this.#shootSystem?.reloading ?? false;
-		// this.#btn.textContent = reloading ? 'RELOADING' : 'ATTACK';
-		this.#btn.classList.toggle('reloading', reloading);
+		this.#btn.classList.toggle('reloading', this.#shootSystem?.reloading ?? false);
 		requestAnimationFrame(() => this.#tick());
 	}
 }

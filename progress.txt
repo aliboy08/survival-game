@@ -109,6 +109,8 @@ skill properties:
 
 2026/04/04
 
-- improve enemy ai + aggro range
-- melee enemy
-- range enemy
+* improve enemy ai + aggro range
+* melee enemy
+* range enemy
+
+* menu screen

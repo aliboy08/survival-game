@@ -21,15 +21,6 @@ export class EquipmentSelectUI {
 	}
 
 	#build() {
-		const openBtn = document.createElement('button');
-		openBtn.id = 'equip-open-btn';
-		openBtn.textContent = 'EQUIP';
-		openBtn.addEventListener('pointerdown', (e) => {
-			e.stopPropagation();
-			this.#toggle();
-		});
-		document.body.appendChild(openBtn);
-
 		this.#overlay = document.createElement('div');
 		this.#overlay.id = 'equip-overlay';
 		this.#overlay.addEventListener('pointerdown', (e) => {
@@ -172,13 +163,7 @@ export class EquipmentSelectUI {
 		}
 	}
 
-	#toggle() {
-		if (this.#overlay.classList.contains('visible')) {
-			this.#close();
-		} else {
-			this.#open();
-		}
-	}
+	open() { this.#open(); }
 
 	#open() {
 		this.#refreshHighlights();

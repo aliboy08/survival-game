@@ -183,3 +183,48 @@ add "Teleport" skill
 
 - on activate button tap twice(within 200ms), teleport the player randomly around a radius from player's inital position
 
+create enemy ai
+create 2 types of enemies
+1.) attacks with melee
+2.) shoots 
+
+create enemy aggro range and make enemies move naturally
+
+update player hud, separate it to sections/container, so that we dont position each element inside absolute, it will be relative to the container
+
+- top left:
+    - hp bar, shield bar,  energy bar, xp bar
+
+- bottom left
+    - virtual joystick
+
+- bottom center
+    - skills 
+
+- bottom right
+    - auto shoot button
+    - shoot button
+    - reload button
+    - switch button
+    - current weapon magazine / ammo
+    - equipped weapon selected indicator
+
+- top right
+    - debug bar
+
+- top center
+    - none for now
+
+clicking on the screen which shoots the weapon, should turn the direction of the player to that point.
+
+
+create a menu button
+- pressing "esc" key will also open this
+when opened, the game is paused
+put the weapon equip and mod select as screen options here
+
+when the equipment screen is opened from menu screen, pressing "esc" would go back the menu screen. Do this for other sub screens.
+
+add skill select on the menu screen.
+
+enemy ai should not wander off outside the screen
