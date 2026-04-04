@@ -24,86 +24,6 @@ const MOD_COLORS = Object.fromEntries(
 	PLAYER_MOD_POOL.map((e) => [e.factory().name, e.color]),
 );
 
-function injectStyles() {
-	if (document.getElementById('player-mod-styles')) return;
-	const style = document.createElement('style');
-	style.id = 'player-mod-styles';
-	style.textContent = `
-		#player-mod-overlay {
-			display: none;
-			position: fixed;
-			inset: 0;
-			background: rgba(0, 0, 0, 0.6);
-			align-items: center;
-			justify-content: center;
-			z-index: 100001;
-			touch-action: none;
-		}
-		#player-mod-overlay.visible {
-			display: flex;
-		}
-		#player-mod-panel {
-			background: rgba(8, 8, 20, 0.99);
-			border: 1px solid rgba(255, 255, 255, 0.1);
-			border-radius: 14px;
-			display: flex;
-			flex-direction: column;
-			overflow: hidden;
-			box-shadow: 0 8px 64px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-			width: 420px;
-		}
-		#player-mod-title-bar {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			padding: 14px 20px 13px;
-			border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-			background: rgba(255, 255, 255, 0.02);
-		}
-		#player-mod-subtitle {
-			color: rgba(255, 255, 255, 0.3);
-			font-family: monospace;
-			font-size: 8px;
-			letter-spacing: 4px;
-			margin-bottom: 3px;
-		}
-		#player-mod-label {
-			color: rgba(255, 255, 255, 0.9);
-			font-family: monospace;
-			font-size: 14px;
-			font-weight: bold;
-			letter-spacing: 4px;
-		}
-		#player-mod-close-btn {
-			width: 26px;
-			height: 26px;
-			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.06);
-			border: 1px solid rgba(255, 255, 255, 0.15);
-			color: rgba(255, 255, 255, 0.45);
-			font-size: 11px;
-			font-family: monospace;
-			font-weight: bold;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		#player-mod-close-btn:active { background: rgba(255,255,255,0.14); color: #fff; }
-		#player-mod-slots-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 6px;
-		}
-		#player-mod-avail-grid {
-			display: grid;
-			grid-template-columns: repeat(4, 1fr);
-			gap: 6px;
-		}
-	`;
-	document.head.appendChild(style);
-}
-
 export class PlayerModSelectUI {
 	#player;
 	#overlay;
@@ -111,7 +31,6 @@ export class PlayerModSelectUI {
 
 	constructor(player) {
 		this.#player = player;
-		injectStyles();
 		this.#build();
 	}
 
@@ -218,7 +137,9 @@ export class PlayerModSelectUI {
 		document.body.appendChild(this.#overlay);
 	}
 
-	open() { this.#open(); }
+	open() {
+		this.#open();
+	}
 
 	#open() {
 		this.#refreshSlots();

@@ -1,0 +1,75 @@
+/* ─── PAUSE MENU ──────────────────────────────────────────────────────────── */
+
+#pause-overlay {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.72);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	align-items: center;
+	justify-content: center;
+	z-index: 10000;
+	touch-action: none;
+}
+
+#pause-overlay.visible {
+	display: flex;
+	animation: equip-fade-in 0.15s ease;
+}
+
+#pause-panel {
+	background: rgba(8, 8, 20, 0.98);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 14px;
+	padding: 36px 44px 32px;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 10px;
+	min-width: 240px;
+	box-shadow:
+		0 8px 64px rgba(0, 0, 0, 0.9),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	animation: equip-panel-in 0.15s ease;
+}
+
+#pause-title {
+	font: bold 18px monospace;
+	color: rgba(255, 255, 255, 0.75);
+	letter-spacing: 8px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.pause-menu-btn {
+	padding: 13px 0;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: rgba(255, 255, 255, 0.65);
+	font: bold 11px monospace;
+	letter-spacing: 3px;
+	cursor: pointer;
+	transition:
+		background 0.12s,
+		border-color 0.12s,
+		color 0.12s;
+}
+
+.pause-menu-btn:active {
+	background: rgba(255, 255, 255, 0.09);
+	border-color: rgba(255, 255, 255, 0.28);
+	color: #fff;
+}
+
+.pause-menu-btn.resume {
+	background: rgba(46, 204, 113, 0.08);
+	border-color: rgba(46, 204, 113, 0.3);
+	color: #2ecc71;
+}
+
+.pause-menu-btn.resume:active {
+	background: rgba(46, 204, 113, 0.18);
+	border-color: rgba(46, 204, 113, 0.55);
+}

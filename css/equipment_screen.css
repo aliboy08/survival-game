@@ -1,0 +1,244 @@
+/* ─── EQUIPMENT SELECT ────────────────────────────────────────────────────── */
+
+#equip-overlay {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.82);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	align-items: center;
+	justify-content: center;
+	z-index: 99999;
+	touch-action: none;
+}
+
+#equip-overlay.visible {
+	display: flex;
+	animation: equip-fade-in 0.16s ease;
+}
+
+@keyframes equip-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+#equip-panel {
+	background: rgba(8, 8, 20, 0.98);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 14px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	box-shadow:
+		0 8px 64px rgba(0, 0, 0, 0.9),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	animation: equip-panel-in 0.16s ease;
+	min-width: 440px;
+}
+
+@keyframes equip-panel-in {
+	from {
+		transform: scale(0.93);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+#equip-title-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px 20px 14px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+	background: rgba(255, 255, 255, 0.02);
+}
+
+#equip-title {
+	color: rgba(255, 255, 255, 0.85);
+	font-family: monospace;
+	font-size: 12px;
+	font-weight: bold;
+	letter-spacing: 6px;
+}
+
+#equip-close-btn {
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: rgba(255, 255, 255, 0.45);
+	font-size: 11px;
+	font-family: monospace;
+	font-weight: bold;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition:
+		background 0.12s,
+		color 0.12s;
+}
+
+#equip-close-btn:active {
+	background: rgba(255, 255, 255, 0.14);
+	color: #fff;
+}
+
+#equip-columns {
+	display: flex;
+	padding: 20px 18px 22px;
+	gap: 12px;
+}
+
+.equip-col {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	flex: 1;
+}
+
+.equip-col-header {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	margin-bottom: 2px;
+}
+
+.equip-col-label {
+	color: rgba(255, 255, 255, 0.38);
+	font-family: monospace;
+	font-size: 9px;
+	letter-spacing: 3px;
+}
+
+.equip-col-accent {
+	height: 2px;
+	border-radius: 2px;
+	opacity: 0.85;
+}
+
+.equip-col[data-slot='primary'] .equip-col-accent {
+	background: #f39c12;
+}
+.equip-col[data-slot='secondary'] .equip-col-accent {
+	background: #00c8ff;
+}
+.equip-col[data-slot='melee'] .equip-col-accent {
+	background: #e74c3c;
+}
+
+.equip-weapon-list {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.equip-weapon-btn {
+	width: 100%;
+	padding: 11px 13px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.09);
+	color: rgba(255, 255, 255, 0.5);
+	font-family: monospace;
+	cursor: pointer;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	transition:
+		background 0.1s,
+		border-color 0.1s;
+}
+
+.equip-weapon-btn:active {
+	background: rgba(255, 255, 255, 0.07);
+}
+
+.card-name {
+	font-size: 11px;
+	font-weight: bold;
+	letter-spacing: 2px;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.card-stats {
+	font-size: 9px;
+	letter-spacing: 0.5px;
+	color: rgba(255, 255, 255, 0.28);
+}
+
+.equip-col[data-slot='primary'] .equip-weapon-btn.active {
+	background: rgba(243, 156, 18, 0.1);
+	border-color: rgba(243, 156, 18, 0.7);
+	box-shadow: 0 0 14px rgba(243, 156, 18, 0.15);
+}
+.equip-col[data-slot='primary'] .equip-weapon-btn.active .card-name {
+	color: #f39c12;
+}
+.equip-col[data-slot='primary'] .equip-weapon-btn.active .card-stats {
+	color: rgba(243, 156, 18, 0.55);
+}
+
+.equip-col[data-slot='secondary'] .equip-weapon-btn.active {
+	background: rgba(0, 200, 255, 0.08);
+	border-color: rgba(0, 200, 255, 0.65);
+	box-shadow: 0 0 14px rgba(0, 200, 255, 0.14);
+}
+.equip-col[data-slot='secondary'] .equip-weapon-btn.active .card-name {
+	color: #00c8ff;
+}
+.equip-col[data-slot='secondary'] .equip-weapon-btn.active .card-stats {
+	color: rgba(0, 200, 255, 0.55);
+}
+
+.equip-col[data-slot='melee'] .equip-weapon-btn.active {
+	background: rgba(231, 76, 60, 0.1);
+	border-color: rgba(231, 76, 60, 0.7);
+	box-shadow: 0 0 14px rgba(231, 76, 60, 0.15);
+}
+.equip-col[data-slot='melee'] .equip-weapon-btn.active .card-name {
+	color: #e74c3c;
+}
+.equip-col[data-slot='melee'] .equip-weapon-btn.active .card-stats {
+	color: rgba(231, 76, 60, 0.55);
+}
+
+.equip-mod-btn {
+	width: 100%;
+	margin-top: 8px;
+	padding: 7px 0;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px dashed rgba(255, 255, 255, 0.14);
+	color: rgba(255, 255, 255, 0.38);
+	font-family: monospace;
+	font-size: 9px;
+	font-weight: bold;
+	letter-spacing: 2px;
+	cursor: pointer;
+	transition:
+		background 0.1s,
+		border-color 0.1s,
+		color 0.1s;
+}
+
+.equip-mod-btn:not(:disabled):active {
+	background: rgba(255, 255, 255, 0.07);
+	border-color: rgba(255, 255, 255, 0.28);
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.equip-mod-btn:disabled {
+	opacity: 0.3;
+	cursor: default;
+}

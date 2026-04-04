@@ -112,4 +112,5 @@ skill properties:
 * melee enemy
 * range enemy
 
-* pause / menu screen (skills, equipment, mods select screen)
+* pause/menu screen (skills, equipment, mods select screen)
+* controls mapping option

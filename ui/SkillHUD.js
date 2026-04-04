@@ -1,96 +1,8 @@
 const SLOT_COLORS = {
 	damage: '#e74c3c',
-	buff:   '#3498db',
-	cc:     '#00c8ff',
+	buff: '#3498db',
+	cc: '#00c8ff',
 };
-
-function injectStyles() {
-	if (document.getElementById('skill-hud-styles')) return;
-	const style = document.createElement('style');
-	style.id = 'skill-hud-styles';
-	style.textContent = `
-		#skill-hud {
-			display: flex;
-			gap: 10px;
-			pointer-events: none;
-		}
-		.skill-card {
-			position: relative;
-			width: 68px;
-			height: 68px;
-			border-radius: 10px;
-			background: rgba(0,0,0,0.65);
-			border: 2px solid rgba(255,255,255,0.12);
-			overflow: hidden;
-			pointer-events: all;
-			cursor: pointer;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			gap: 2px;
-			user-select: none;
-			-webkit-user-select: none;
-			touch-action: manipulation;
-			transition: border-color 0.15s;
-		}
-		.skill-card.active {
-			border-color: var(--skill-color, #fff);
-			box-shadow: 0 0 12px var(--skill-color, #fff);
-		}
-		.skill-card.channeling {
-			animation: skill-pulse 0.6s ease-in-out infinite alternate;
-		}
-		@keyframes skill-pulse {
-			from { box-shadow: 0 0 8px  var(--skill-color, #fff); }
-			to   { box-shadow: 0 0 22px var(--skill-color, #fff); }
-		}
-		.skill-card-name {
-			font: bold 9px monospace;
-			color: #fff;
-			text-align: center;
-			padding: 0 4px;
-			z-index: 2;
-			pointer-events: none;
-		}
-		.skill-card-cost {
-			font: 8px monospace;
-			color: #00c8ff;
-			z-index: 2;
-			pointer-events: none;
-		}
-		.skill-card-empty-label {
-			font: 9px monospace;
-			color: rgba(255,255,255,0.25);
-			z-index: 2;
-		}
-		.skill-card-index {
-			position: absolute;
-			top: 3px;
-			left: 5px;
-			font: 8px monospace;
-			color: rgba(255,255,255,0.3);
-			z-index: 2;
-		}
-		.skill-cooldown-overlay {
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			background: rgba(0,0,0,0.72);
-			transition: height 0.05s linear;
-			z-index: 3;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		.skill-cooldown-text {
-			font: bold 13px monospace;
-			color: rgba(255,255,255,0.9);
-		}
-	`;
-	document.head.appendChild(style);
-}
 
 export class SkillHUD {
 	#player;
@@ -101,10 +13,9 @@ export class SkillHUD {
 	#container;
 
 	constructor(player, skillSystem, skillSelectUI) {
-		this.#player        = player;
-		this.#skillSystem   = skillSystem;
+		this.#player = player;
+		this.#skillSystem = skillSystem;
 		this.#skillSelectUI = skillSelectUI;
-		injectStyles();
 		this.#build();
 		this.#loop();
 	}
@@ -196,10 +107,10 @@ export class SkillHUD {
 			const color = SLOT_COLORS[skill.category] ?? '#fff';
 			card.style.setProperty('--skill-color', color);
 
-			const isActive     = slots.isActive(i);
+			const isActive = slots.isActive(i);
 			const isChanneling = slots.isChanneling(i);
-			const cdFrac       = slots.cooldownFraction(i);
-			const cdSecs       = slots.cooldownOf(i);
+			const cdFrac = slots.cooldownFraction(i);
+			const cdSecs = slots.cooldownOf(i);
 
 			let className = 'skill-card';
 			if (isChanneling) className += ' channeling';
@@ -209,11 +120,14 @@ export class SkillHUD {
 			nameEl.textContent = skill.name.toUpperCase();
 			costEl.textContent = skill.channeling
 				? `${skill.drainRate}/s`
-				: skill.energyCost > 0 ? `${skill.energyCost}` : '';
+				: skill.energyCost > 0
+					? `${skill.energyCost}`
+					: '';
 
 			if (cdFrac > 0) {
 				overlay.style.height = `${Math.round(cdFrac * 100)}%`;
-				cdText.textContent = cdSecs >= 1 ? Math.ceil(cdSecs) : cdSecs.toFixed(1);
+				cdText.textContent =
+					cdSecs >= 1 ? Math.ceil(cdSecs) : cdSecs.toFixed(1);
 			} else {
 				overlay.style.height = '0%';
 				cdText.textContent = '';

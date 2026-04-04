@@ -1,0 +1,217 @@
+#mod-overlay {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	align-items: center;
+	justify-content: center;
+	z-index: 100001;
+	touch-action: none;
+}
+
+#mod-overlay.visible {
+	display: flex;
+	animation: equip-fade-in 0.14s ease;
+}
+
+#mod-panel {
+	background: rgba(8, 8, 20, 0.99);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 14px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	box-shadow:
+		0 8px 64px rgba(0, 0, 0, 0.95),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	animation: equip-panel-in 0.14s ease;
+	width: 420px;
+}
+
+#mod-title-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 20px 13px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+	background: rgba(255, 255, 255, 0.02);
+}
+
+#mod-subtitle {
+	color: rgba(255, 255, 255, 0.3);
+	font-family: monospace;
+	font-size: 8px;
+	letter-spacing: 4px;
+	margin-bottom: 3px;
+}
+
+#mod-weapon-label {
+	color: rgba(255, 255, 255, 0.9);
+	font-family: monospace;
+	font-size: 14px;
+	font-weight: bold;
+	letter-spacing: 4px;
+}
+
+#mod-close-btn {
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: rgba(255, 255, 255, 0.45);
+	font-size: 11px;
+	font-family: monospace;
+	font-weight: bold;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition:
+		background 0.12s,
+		color 0.12s;
+}
+
+#mod-close-btn:active {
+	background: rgba(255, 255, 255, 0.14);
+	color: #fff;
+}
+
+.mod-section {
+	padding: 16px 18px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.mod-section-label {
+	color: rgba(255, 255, 255, 0.3);
+	font-family: monospace;
+	font-size: 8px;
+	letter-spacing: 3px;
+}
+
+.mod-divider {
+	height: 1px;
+	background: rgba(255, 255, 255, 0.06);
+	margin: 0 18px;
+}
+
+#mod-slots-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 6px;
+}
+
+.mod-slot {
+	border-radius: 8px;
+	padding: 10px 10px 8px;
+	min-height: 58px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	position: relative;
+}
+
+.mod-slot.empty {
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px dashed rgba(255, 255, 255, 0.1);
+	align-items: center;
+	justify-content: center;
+}
+
+.mod-slot.filled {
+	background: color-mix(in srgb, var(--mod-color) 12%, transparent);
+	border: 1px solid color-mix(in srgb, var(--mod-color) 55%, transparent);
+	box-shadow: 0 0 10px color-mix(in srgb, var(--mod-color) 12%, transparent);
+}
+
+.mod-slot-empty-label {
+	color: rgba(255, 255, 255, 0.18);
+	font-family: monospace;
+	font-size: 9px;
+	letter-spacing: 1px;
+}
+
+.mod-slot-name {
+	color: var(--mod-color);
+	font-family: monospace;
+	font-size: 10px;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+.mod-slot-remove {
+	align-self: flex-end;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: rgba(255, 255, 255, 0.4);
+	font-size: 8px;
+	font-family: monospace;
+	font-weight: bold;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition:
+		background 0.1s,
+		color 0.1s;
+}
+
+.mod-slot-remove:active {
+	background: rgba(231, 76, 60, 0.3);
+	border-color: #e74c3c;
+	color: #e74c3c;
+}
+
+#mod-avail-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 6px;
+}
+
+.mod-avail-card {
+	border-radius: 8px;
+	padding: 9px 8px 8px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	cursor: pointer;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	transition:
+		background 0.1s,
+		border-color 0.1s;
+}
+
+.mod-avail-card:active {
+	background: color-mix(in srgb, var(--mod-color) 14%, transparent);
+	border-color: color-mix(in srgb, var(--mod-color) 55%, transparent);
+}
+
+.mod-avail-type {
+	font-family: monospace;
+	font-size: 7px;
+	letter-spacing: 2px;
+	color: var(--mod-color);
+	opacity: 0.7;
+}
+
+.mod-avail-name {
+	font-family: monospace;
+	font-size: 10px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.mod-avail-desc {
+	font-family: monospace;
+	font-size: 8px;
+	color: rgba(255, 255, 255, 0.3);
+	letter-spacing: 0.3px;
+}

@@ -5,15 +5,17 @@ export class PauseMenu {
 	#equipUI;
 	#modUI;
 	#skillSelectUI;
+	#controlsScreen;
 	#isOpen   = false;
 	#disabled = false;
 
-	constructor(game, player, equipUI, modUI, skillSelectUI) {
-		this.#game          = game;
-		this.#player        = player;
-		this.#equipUI       = equipUI;
-		this.#modUI         = modUI;
-		this.#skillSelectUI = skillSelectUI;
+	constructor(game, player, equipUI, modUI, skillSelectUI, controlsScreen) {
+		this.#game           = game;
+		this.#player         = player;
+		this.#equipUI        = equipUI;
+		this.#modUI          = modUI;
+		this.#skillSelectUI  = skillSelectUI;
+		this.#controlsScreen = controlsScreen;
 		this.#build();
 		this.#setupKeys();
 	}

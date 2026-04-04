@@ -228,3 +228,10 @@ when the equipment screen is opened from menu screen, pressing "esc" would go ba
 add skill select on the menu screen.
 
 enemy ai should not wander off outside the screen
+
+add controls mapping in menu screen, controls for:
+- movement controls
+- shoot
+- skill activate
+- reload
+- switch weapon
