@@ -1,4 +1,5 @@
 import { GameObject } from '../core/GameObject.js';
+import { Bindings }    from '../core/Bindings.js';
 
 export class SkillSystem extends GameObject {
 	#player;
@@ -11,7 +12,8 @@ export class SkillSystem extends GameObject {
 		this.layer   = 5;
 
 		window.addEventListener('keydown', (e) => {
-			const index = ['Digit1', 'Digit2', 'Digit3', 'Digit4'].indexOf(e.code);
+			const index = ['skill1', 'skill2', 'skill3', 'skill4']
+				.findIndex(a => Bindings.get(a) === e.code);
 			if (index !== -1) this.activate(index);
 		});
 	}

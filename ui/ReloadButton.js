@@ -1,3 +1,5 @@
+import { Bindings } from '../core/Bindings.js';
+
 export class ReloadButton {
 	#btn;
 
@@ -10,5 +12,9 @@ export class ReloadButton {
 			shootSystem.reload();
 		});
 		document.getElementById('hud-br-row-secondary').appendChild(this.#btn);
+
+		window.addEventListener('keydown', (e) => {
+			if (e.code === Bindings.get('reload')) shootSystem.reload();
+		});
 	}
 }

@@ -1,4 +1,5 @@
-import { Gun } from '../weapon/guns/Gun.js';
+import { Gun }      from '../weapon/guns/Gun.js';
+import { Bindings } from '../core/Bindings.js';
 
 export class WeaponSwitchButton {
 	#player;
@@ -13,6 +14,13 @@ export class WeaponSwitchButton {
 		this.#build();
 		player.on('weaponswitch', () => this.#updateLabel());
 		this.#tick();
+
+		window.addEventListener('keydown', (e) => {
+			if (e.code === Bindings.get('switchWeapon')) {
+				e.preventDefault();
+				this.#player.cycleWeapon();
+			}
+		});
 	}
 
 	#build() {

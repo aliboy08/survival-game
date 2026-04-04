@@ -1,3 +1,5 @@
+import { Bindings } from './Bindings.js';
+
 export class Input {
   #keys           = new Set();
   #joystickVector = { x: 0, y: 0 };
@@ -13,7 +15,7 @@ export class Input {
 
     window.addEventListener('keydown', (e) => {
       this.#keys.add(e.code);
-      if (e.code === 'Space') e.preventDefault();
+      if (e.code === Bindings.get('shoot')) e.preventDefault();
     });
     window.addEventListener('keyup', (e) => this.#keys.delete(e.code));
 
@@ -50,10 +52,10 @@ export class Input {
 
   // Raw keyboard direction (-1 | 0 | 1 per axis) — used by joystick visual
   get keyboardMovement() {
-    const up    = this.isDown('KeyW') || this.isDown('ArrowUp');
-    const down  = this.isDown('KeyS') || this.isDown('ArrowDown');
-    const left  = this.isDown('KeyA') || this.isDown('ArrowLeft');
-    const right = this.isDown('KeyD') || this.isDown('ArrowRight');
+    const up    = this.isDown(Bindings.get('moveUp'))    || this.isDown('ArrowUp');
+    const down  = this.isDown(Bindings.get('moveDown'))  || this.isDown('ArrowDown');
+    const left  = this.isDown(Bindings.get('moveLeft'))  || this.isDown('ArrowLeft');
+    const right = this.isDown(Bindings.get('moveRight')) || this.isDown('ArrowRight');
 
     return {
       x: (right ? 1 : 0) - (left ? 1 : 0),
@@ -69,7 +71,7 @@ export class Input {
   setShootHeld(val) { this.#shootHeld = val; }
 
   get shootHeld() {
-    return this.#shootHeld || this.isDown('Space') || this.#canvasPointerHeld;
+    return this.#shootHeld || this.isDown(Bindings.get('shoot')) || this.#canvasPointerHeld;
   }
 
   // Current canvas shoot target while pointer is held (null when released)
